@@ -1,31 +1,34 @@
 <?php
 
-require 'E:\xampp\htdocs\API\vendor\tracy\tracy\src\tracy.php';
-require 'E:\xampp\htdocs\API\vendor\aaa\API\src\apiRequests\leagueAPI.php';
-require 'E:\xampp\htdocs\API\vendor\aaa\API\functions\functions.php';
-require 'E:\xampp\htdocs\API\vendor\aaa\API\DB\dbFunctions.php';
+require '../../../API/functions/functions.php';
+require '../../../API/src/apiRequests/curl.php';
 
-require 'E:\xampp\htdocs\API\vendor\autoload.php';
+require '../../../../../../API/vendor/autoload.php';
+
 use Tracy\Debugger;
 
 Debugger::enable();
 // Debugger::$strictMode = true;
 Debugger::$maxDepth = 10; // default: 3
 
-use LeagueAPI\LeagueAPI;
+use API\LeagueAPI\LeagueAPI;
+use API\dbCall\dbCall;
 
 $lol = new LeagueAPI();
 $db = new dbCall();
 
 $limit = 5;
 
-$region = "eun1"; 
+$region = "eun1";
 $locale = "en_GB";
 $version = "9.13.1";
-$a = $lol->getSummonerName($region, "alexisthebest");
-$pa = $lol->getLeagueSummoner($region, $a->id);
 
-pr($pa);
+$a = $lol->getSummonerName($region, "tiltmachine");
+
+$db->setSummoner($region, $a);
+$b = $lol->getLeagueSummoner($region, $a->id);
+
+pr($b);
 
 // pr($lol->getMatchById("eun1", 2000000000));
 // $b = $db->getMatchlist($region, $a->accountId, $limit);
@@ -75,5 +78,3 @@ pr($pa);
 // $matchlist = $db->getMatchlist($region, $summoner->accountId, $limit);
 // $matchById = $db->getMatchById($region, $matchlist);
 // dump($matchById);
-
-?>

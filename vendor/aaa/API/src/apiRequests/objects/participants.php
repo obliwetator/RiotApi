@@ -4,23 +4,24 @@
 //  Model Generated using http://www.jsoncafe.com/ 
 //  Created on June 12, 2019
 
-namespace LeagueAPI\Objects;
+namespace API\LeagueAPI\Objects;
+use API\LeagueAPI\Objects\objectInit;
 
 class Participant extends objectInit
 {
-    /** @var Integer $championId */
+    /** @var int $championId */
     public $championId;
-    /** @var String $highestAchievedSeasonTier */
+    /** @var string $highestAchievedSeasonTier */
     public $highestAchievedSeasonTier;
-    /** @var Integer $participantId */
+    /** @var int $participantId */
     public $participantId;
-    /** @var Integer $spell1Id */
+    /** @var int $spell1Id */
     public $spell1Id;
-    /** @var Integer $spell2Id */
+    /** @var int $spell2Id */
     public $spell2Id;
     /** @var Stat $stats */
     public $stats;
-    /** @var Integer $teamId */
+    /** @var int $teamId */
     public $teamId;
     /** @var Timeline $timeline */
     public $timeline;

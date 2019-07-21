@@ -4,7 +4,8 @@
 //  Model Generated using http://www.jsoncafe.com/ 
 //  Created on July 17, 2019
 
-namespace LeagueAPI\Objects;
+namespace API\LeagueAPI\Objects;
+use API\LeagueAPI\Objects\objectInit;
 
 class LeagueEntriesMiniSeries extends objectInit
 {

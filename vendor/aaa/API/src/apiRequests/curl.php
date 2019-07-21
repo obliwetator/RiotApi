@@ -1,4 +1,7 @@
 <?php
+
+use PHPUnit\Runner\Exception;
+
 define('APIKEY', 'RGAPI-ff65a9fb-760c-4182-af48-ceda642a8c31');
 
 
@@ -68,14 +71,63 @@ function curl($targetUrl, $assoc = false, $additionalParameters = null)
 	pr($aHeaders);
 
 	// check for response code and proceed accordingly
+
 	if ($aHeaders["response_code"] == 200) {
 		return $data;
-	} else {
-		if ($aHeaders["retry-after"] == true)
-			die("Error limit reached" . " retry-after " . $aHeaders["retry-after"] . " seconds");
-		// NOT 200 code
-		// TODO: Add 404, Other error codes?
-		eh("error " . $aHeaders["response_code"] . " Code");
 	}
-	return $data;
+	// Check the reponse code error
+	else {
+		// TODO: Add stuff for different errors?
+		switch ($aHeaders["response_code"]) {
+				// Bad request
+			case 400:
+				eh("error " . $aHeaders["response_code"] . " Code");
+				break;
+				// Unauthorized
+			case 401:
+				eh("error " . $aHeaders["response_code"] . " Code");
+				break;
+				// Forbidden (no API key/ wrong API key)
+			case 403:
+				eh("error " . $aHeaders["response_code"] . " Code");
+				break;
+				// Data not found
+			case 404:
+				eh("error " . $aHeaders["response_code"] . " Code");
+				break;
+				// Method not allowed
+			case 405:
+				eh("error " . $aHeaders["response_code"] . " Code");
+				break;
+				// Unsupported media type
+			case 415:
+				eh("error " . $aHeaders["response_code"] . " Code");
+				break;
+				// Limit reached
+			case 429:
+				die("Error limit reached" . " retry-after " . $aHeaders["retry-after"] . " seconds");
+				break;
+
+				// Errors from RIOT servers
+				// Internal server error
+			case 500:
+				eh("error " . $aHeaders["response_code"] . " Code");
+				break;
+				//Bad gateway
+			case 502:
+				eh("error " . $aHeaders["response_code"] . " Code");
+				break;
+				// Service unavailable
+			case 503:
+				eh("error " . $aHeaders["response_code"] . " Code");
+				break;
+				// Gateway timeout
+			case 504:
+				eh("error " . $aHeaders["response_code"] . " Code");
+				break;
+			default:
+				throw new Exception("Unknown error " . $aHeaders["response_code"] . " Code");
+				break;
+		}
+	}
 }

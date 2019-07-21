@@ -4,34 +4,35 @@
 //  Model Generated using http://www.jsoncafe.com/ 
 //  Created on July 17, 2019
 
-namespace LeagueAPI\Objects;
+namespace API\LeagueAPI\Objects;
+use API\LeagueAPI\Objects\objectInit;
 
 class LeagueSummoner extends objectInit
 {
-    /** @var String $leagueId */
+    /** @var string $leagueId */
     public $leagueId;
-    /** @var String $queueType */
+    /** @var string $queueType */
     public $queueType;
-    /** @var String $tier */
+    /** @var string $tier */
     public $tier;
-    /** @var String $rank */
+    /** @var string $rank */
     public $rank;
-    /** @var String $summonerId */
+    /** @var string $summonerId */
     public $summonerId;
-    /** @var String $summonerName */
+    /** @var string $summonerName */
     public $summonerName;
-    /** @var Integer $leaguePoints */
+    /** @var int $leaguePoints */
     public $leaguePoints;
-    /** @var Integer $wins */
+    /** @var int $wins */
     public $wins;
-    /** @var Integer $losses */
+    /** @var int $losses */
     public $losses;
-    /** @var Boolean $veteran */
+    /** @var bool $veteran */
     public $veteran;
-    /** @var Boolean $inactive */
+    /** @var bool $inactive */
     public $inactive;
-    /** @var Boolean $freshBlood */
+    /** @var bool $freshBlood */
     public $freshBlood;
-    /** @var Boolean $hotStreak */
+    /** @var bool $hotStreak */
     public $hotStreak;
 }

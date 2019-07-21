@@ -4,39 +4,40 @@
 //  Model Generated using http://www.jsoncafe.com/ 
 //  Created on June 12, 2019
 
-namespace LeagueAPI\Objects;
+namespace API\LeagueAPI\Objects;
+use API\LeagueAPI\Objects\objectInit;
 
 class Team extends objectInit
 {
-    /** @var Integer $teamId */
+    /** @var int $teamId */
     public $teamId;
-    /** @var String $win */
+    /** @var string $win */
     public $win;
-    /** @var Boolean $firstBlood */
+    /** @var bool $firstBlood */
     public $firstBlood;
-    /** @var Boolean $firstTower */
+    /** @var bool $firstTower */
     public $firstTower;
-    /** @var Boolean $firstInhibitor */
+    /** @var bool $firstInhibitor */
     public $firstInhibitor;
-    /** @var Boolean $firstBaron */
+    /** @var bool $firstBaron */
     public $firstBaron;
-    /** @var Boolean $firstDragon */
+    /** @var bool $firstDragon */
     public $firstDragon;
-    /** @var Boolean $firstRiftHerald */
+    /** @var bool $firstRiftHerald */
     public $firstRiftHerald;
-    /** @var Integer $towerKills */
+    /** @var int $towerKills */
     public $towerKills;
-    /** @var Integer $inhibitorKills */
+    /** @var int $inhibitorKills */
     public $inhibitorKills;
-    /** @var Integer $baronKills */
+    /** @var int $baronKills */
     public $baronKills;
-    /** @var Integer $dragonKills */
+    /** @var int $dragonKills */
     public $dragonKills;
-    /** @var Integer $vilemawKills */
+    /** @var int $vilemawKills */
     public $vilemawKills;
-    /** @var Integer $riftHeraldKills */
+    /** @var int $riftHeraldKills */
     public $riftHeraldKills;
-    /** @var Integer $dominionVictoryScore */
+    /** @var int $dominionVictoryScore */
     public $dominionVictoryScore;
     /** @var Ban[] $bans */
     public $bans;

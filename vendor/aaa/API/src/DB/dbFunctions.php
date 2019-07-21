@@ -1,25 +1,26 @@
 <?php
 
+namespace API\dbCall;
 
-use LeagueAPI\LeagueAPI;
+use API\LeagueAPI\LeagueAPI;
 use Hamcrest\Type\IsArray;
 use function GuzzleHttp\json_encode;
 
-use LeagueAPI\Objects;
+use API\LeagueAPI\Objects;
 
 class dbCall
 {
-	/** @var mysqli $conn */
+
 	public $conn;
 
-	private function openCon($dbRegion)
+	private function openCon(string $dbRegion)
 	{
 		$db_server = "localhost";
 		$db_user = "root";
 		$db_pass = "";
 		$db_database = "lol_database_" . $dbRegion;
 
-		$conn = new mysqli($db_server, $db_user, $db_pass, $db_database) or die("Connect failed: %s\n" . $conn->error);
+		$conn = new \mysqli($db_server, $db_user, $db_pass, $db_database) or die("Connect failed: %s\n" . $conn->error);
 
 		$this->conn = $conn;
 
@@ -30,7 +31,7 @@ class dbCall
 		$conn->close();
 	}
 
-	private function makeDbCallGet($region, $query)
+	private function makeDbCallGet(string $region, string $query)
 	{
 		$this->openCon($region);
 		$queryResult = $this->conn->query($query);
@@ -55,7 +56,7 @@ class dbCall
 		return $resultAssoc;
 	}
 
-	private function makeDbCallGetMulti($region, $query)
+	private function makeDbCallGetMulti(string $region, string $query)
 	{
 		$this->openCon($region);
 
@@ -64,15 +65,12 @@ class dbCall
 		$x = 0;
 		if ($this->conn->multi_query($query)) {
 			do {
-				$conn = $this->conn; 
+				$conn = $this->conn;
 				/* store first result set */
-				if ($result = $this->conn->store_result()) 
-				{
-					if ($result->num_rows) 
-					{
+				if ($result = $this->conn->store_result()) {
+					if ($result->num_rows) {
 						$matches[$x] = $result->fetch_assoc();
-					}
-					else {
+					} else {
 						$matches[$x] = null;
 					}
 					$x++;
@@ -81,9 +79,8 @@ class dbCall
 
 				if ($this->conn->more_results()) {
 					// DO something between results
-				
-				}
-				else {
+
+				} else {
 					break;
 				}
 			} while ($this->conn->next_result());
@@ -92,7 +89,7 @@ class dbCall
 		return $matches;
 	}
 
-	private function makeDbCallSet($region, $query)
+	private function makeDbCallSet(string $region, string $query)
 	{
 		$this->openCon($region);
 
@@ -117,7 +114,7 @@ class dbCall
 		$this->closeCon($this->conn);
 	}
 	/** @return Objects\Summoner */
-	public function getSummoner(string $region, string $summonerName) : Objects\Summoner
+	public function getSummoner(string $region, string $summonerName)
 	{
 		$summonerName = str_replace(' ', '', $summonerName);
 
@@ -135,11 +132,10 @@ class dbCall
 			$resultAssoc["class"] = "summoner";
 
 			$summonerDataDb = new Objects\Summoner($resultAssoc);
-
 		}
 		return $summonerDataDb;
 	}
-	public function setSummoner($region, Objects\Summoner $summoner)
+	public function setSummoner(string $region, Objects\Summoner $summoner)
 	{
 		$insertQuery = "INSERT IGNORE INTO `summoner_$region`(`id`, `accountId`, `puuid`, `name`, `profileIconId`, `revisionDate`, `summonerLevel`, `trimmedName`)
 		VALUES ('$summoner->id','$summoner->accountId','$summoner->puuid','$summoner->name','$summoner->profileIconId','$summoner->revisionDate','$summoner->summonerLevel','$summoner->trimmedName')";
@@ -147,7 +143,7 @@ class dbCall
 		$this->makeDbCallSet($region, $insertQuery);
 	}
 	/** @return Objects\MatchList */
-	public function getMatchlist($region, string $accountId, int $limit = 10) : Objects\MatchList
+	public function getMatchlist($region, string $accountId, int $limit = 10): Objects\MatchList
 	{
 		$selectQuery = "SELECT * FROM `matchlist_eun1` WHERE `accountId` = '$accountId' ORDER BY `matchlist_$region`.`timestamp` DESC LIMIT $limit";
 
@@ -227,51 +223,42 @@ class dbCall
 	}
 
 	/** @return MatchById[] */
-	public function getMatchById(string $region, MatchList $matchlist) : Objects\MatchById
+	public function getMatchById(string $region, MatchList $matchlist): Objects\MatchById
 	{
 		$selectQuery = "";
-		foreach ($matchlist->matches as $key => $value) 
-		{
+		foreach ($matchlist->matches as $key => $value) {
 			$selectQuery = $selectQuery . "SELECT * FROM `gamebyid_eun1` WHERE `gameId` = " . $matchlist->matches[$key]->gameId . ";\n";
 		}
 		$result = $this->makeDbCallGetMulti($region, $selectQuery);
 		// Find Missing games
-		foreach ($result as $key => $value) 
-		{
-			if (isset($value)) 
-			{
+		foreach ($result as $key => $value) {
+			if (isset($value)) {
 				// We have the match. No actions taken.
-			}
-			else
-			{
+			} else {
 				// We dont have that match in our DB. We will check the matchlist to see which game we don't have and download it from the API.
 				$lol = $this->makeApiRequest();
-				$result[$key] = $lol->getMatchById($region,$matchlist->matches[$key]->gameId);
+				$result[$key] = $lol->getMatchById($region, $matchlist->matches[$key]->gameId);
 				// Store the values to DB
-				$this->setMatchById($region,$result[$key]);
+				$this->setMatchById($region, $result[$key]);
 				die;
-				
 			}
 		}
 
 		// Convert to MatchById Class
-		foreach ($result as $key => $value) 
-		{
-			
-			if (is_array($value)) 
-			{
+		foreach ($result as $key => $value) {
+
+			if (is_array($value)) {
 				$resultAssoc = json_decode($result[$key]["matchJson"], true);
 				$resultAssoc["class"] = "matchbyid";
-				$matchById[$key] = new MatchById($resultAssoc);
-			}
-			else {
+				$matchById[$key] = new Objects\MatchById($resultAssoc);
+			} else {
 				$matchById[$key] = $result[$key];
 			}
 		}
 		return $matchById;
 	}
 
-	public function setMatchById($region, Objects\MatchList $matchById)
+	public function setMatchById(string $region, Objects\MatchList $matchById)
 	{
 		$json = json_encode($matchById);
 
@@ -280,13 +267,13 @@ class dbCall
 		$this->makeDbCallSet($region, $insertQuery);
 	}
 
-	public function getTimeline($region)
+	public function getTimeline(string $region)
 	{
 		throw new Exception("Unimplemented");
 		return;
 	}
 	/** @var matchTimeline $timeline */
-	public function setTimeline($region, $timeline)
+	public function setTimeline(string $region, $timeline)
 	{
 		throw new Exception("Unimplemented");
 		return;

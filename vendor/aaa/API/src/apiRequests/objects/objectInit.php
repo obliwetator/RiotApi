@@ -1,7 +1,6 @@
 <?php
 
-namespace LeagueAPI\Objects;
-  
+namespace API\LeagueAPI\Objects;
 use LeagueAPI\LeagueAPI;
 
 class objectInit

@@ -1,6 +1,6 @@
 <?php
 
-use LeagueAPI\LeagueAPI;
+namespace API\DragonData;
 
 class DragonData
 {

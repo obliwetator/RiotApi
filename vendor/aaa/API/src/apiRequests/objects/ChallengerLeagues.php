@@ -4,7 +4,7 @@
 //  Model Generated using http://www.jsoncafe.com/ 
 //  Created on July 17, 2019
 
-namespace LeagueAPI\Objects;
+namespace API\LeagueAPI\Objects;
 use LeagueAPI\Objects\objectInit;
 
 class ChallengerLeagues extends objectInit

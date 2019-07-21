@@ -95,7 +95,6 @@ class ComposerStaticInit653aa1a7387064700d09c3fdb742aeca
         'L' => 
         array (
             'League\\Flysystem\\' => 17,
-            'LeagueAPI\\' => 10,
             'Laravel\\Tinker\\' => 15,
         ),
         'J' => 
@@ -118,7 +117,6 @@ class ComposerStaticInit653aa1a7387064700d09c3fdb742aeca
         ),
         'D' => 
         array (
-            'DragonData\\' => 11,
             'Dotenv\\' => 7,
             'Doctrine\\Instantiator\\' => 22,
             'Doctrine\\Common\\Lexer\\' => 22,
@@ -137,6 +135,9 @@ class ComposerStaticInit653aa1a7387064700d09c3fdb742aeca
         'A' => 
         array (
             'App\\' => 4,
+            'API\\dbCall\\' => 11,
+            'API\\LeagueAPI\\' => 14,
+            'API\\DragonData\\' => 15,
         ),
     );
 
@@ -295,10 +296,6 @@ class ComposerStaticInit653aa1a7387064700d09c3fdb742aeca
         array (
             0 => __DIR__ . '/..' . '/league/flysystem/src',
         ),
-        'LeagueAPI\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/aaa/API/src/apiRequests',
-        ),
         'Laravel\\Tinker\\' => 
         array (
             0 => __DIR__ . '/..' . '/laravel/tinker/src',
@@ -326,10 +323,6 @@ class ComposerStaticInit653aa1a7387064700d09c3fdb742aeca
         'Egulias\\EmailValidator\\' => 
         array (
             0 => __DIR__ . '/..' . '/egulias/email-validator/EmailValidator',
-        ),
-        'DragonData\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/aaa/API/src/Dragondata',
         ),
         'Dotenv\\' => 
         array (
@@ -367,6 +360,18 @@ class ComposerStaticInit653aa1a7387064700d09c3fdb742aeca
         array (
             0 => __DIR__ . '/../..' . '/app',
         ),
+        'API\\dbCall\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/aaa/API/src/DB',
+        ),
+        'API\\LeagueAPI\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/aaa/API/src/apiRequests',
+        ),
+        'API\\DragonData\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/aaa/API/src/DragonData',
+        ),
     );
 
     public static $prefixesPsr0 = array (
@@ -391,6 +396,61 @@ class ComposerStaticInit653aa1a7387064700d09c3fdb742aeca
     );
 
     public static $classMap = array (
+        'API\\DragonData\\DragonData' => __DIR__ . '/..' . '/aaa/API/src/DragonData/DragonData.php',
+        'API\\LeagueAPI\\LeagueAPI' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/leagueAPI.php',
+        'API\\LeagueAPI\\Objects\\ActiveGame' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/ActiveGame.php',
+        'API\\LeagueAPI\\Objects\\ActiveParticipant' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/ActiveParticipant.php',
+        'API\\LeagueAPI\\Objects\\Ban' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/bans.php',
+        'API\\LeagueAPI\\Objects\\BanActive' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/banActiveGame.php',
+        'API\\LeagueAPI\\Objects\\ChallengerLeagues' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/ChallengerLeagues.php',
+        'API\\LeagueAPI\\Objects\\ChallengerLeaguesEntry' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/ChallengerLeaguesEntry.php',
+        'API\\LeagueAPI\\Objects\\LeagueEntries' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/LeagueEntries.php',
+        'API\\LeagueAPI\\Objects\\LeagueEntriesMiniSeries' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/LeagueEntriesMiniSeries.php',
+        'API\\LeagueAPI\\Objects\\LeagueSummoner' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/LeagueSummoner.php',
+        'API\\LeagueAPI\\Objects\\Match' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/matchlist.php',
+        'API\\LeagueAPI\\Objects\\MatchById' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/matchById.php',
+        'API\\LeagueAPI\\Objects\\MatchList' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/matchlist.php',
+        'API\\LeagueAPI\\Objects\\Observer' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/Observer.php',
+        'API\\LeagueAPI\\Objects\\Participant' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/participants.php',
+        'API\\LeagueAPI\\Objects\\ParticipantIdentity' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/participantIdentities.php',
+        'API\\LeagueAPI\\Objects\\Perk' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/Perk.php',
+        'API\\LeagueAPI\\Objects\\Player' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/player.php',
+        'API\\LeagueAPI\\Objects\\Stat' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/stats.php',
+        'API\\LeagueAPI\\Objects\\StaticData\\StaticChampion' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticChampion.php',
+        'API\\LeagueAPI\\Objects\\StaticData\\StaticChampionBlock' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticChampionBlock.php',
+        'API\\LeagueAPI\\Objects\\StaticData\\StaticChampionFull' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticChampionFull.php',
+        'API\\LeagueAPI\\Objects\\StaticData\\StaticChampionImage' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticChampionImage.php',
+        'API\\LeagueAPI\\Objects\\StaticData\\StaticChampionInfo' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticChampionInfo.php',
+        'API\\LeagueAPI\\Objects\\StaticData\\StaticChampionItem' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticChampionItem.php',
+        'API\\LeagueAPI\\Objects\\StaticData\\StaticChampionLeveltip' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticChampionLeveltip.php',
+        'API\\LeagueAPI\\Objects\\StaticData\\StaticChampionList' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticChampionList.php',
+        'API\\LeagueAPI\\Objects\\StaticData\\StaticChampionPassive' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticChampionPassive.php',
+        'API\\LeagueAPI\\Objects\\StaticData\\StaticChampionRecommended' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticChampionRecommended.php',
+        'API\\LeagueAPI\\Objects\\StaticData\\StaticChampionSkin' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticChampionSkin.php',
+        'API\\LeagueAPI\\Objects\\StaticData\\StaticChampionSpell' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticChampionSpell.php',
+        'API\\LeagueAPI\\Objects\\StaticData\\StaticChampionStat' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticChampionStat.php',
+        'API\\LeagueAPI\\Objects\\StaticData\\StaticGold' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticItemGold.php',
+        'API\\LeagueAPI\\Objects\\StaticData\\StaticImage' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticItemImage.php',
+        'API\\LeagueAPI\\Objects\\StaticData\\StaticInventoryDataStats' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticItemInventoryDataStats.php',
+        'API\\LeagueAPI\\Objects\\StaticData\\StaticItem' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticItem.php',
+        'API\\LeagueAPI\\Objects\\StaticData\\StaticItemGroup' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticItemGroup.php',
+        'API\\LeagueAPI\\Objects\\StaticData\\StaticItemList' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticItemList.php',
+        'API\\LeagueAPI\\Objects\\StaticData\\StaticItemTree' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticItemTree.php',
+        'API\\LeagueAPI\\Objects\\StaticData\\StaticSpellVars' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticChampionSpellVars.php',
+        'API\\LeagueAPI\\Objects\\Summoner' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/summoner.php',
+        'API\\LeagueAPI\\Objects\\Team' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/teams.php',
+        'API\\LeagueAPI\\Objects\\Timeline' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/timeline.php',
+        'API\\LeagueAPI\\Objects\\championMasteries' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/championMasteries.php',
+        'API\\LeagueAPI\\Objects\\championMasteriesByChampion' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/championMasteriesByChampion.php',
+        'API\\LeagueAPI\\Objects\\championMasteriesFrame' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/championMasteriesFrame.php',
+        'API\\LeagueAPI\\Objects\\gameCustomizationObjects' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/gameCustomizationObjects.php',
+        'API\\LeagueAPI\\Objects\\matchTimeline' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/matchTimeline.php',
+        'API\\LeagueAPI\\Objects\\matchTimelineEvent' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/matchTimelineEvent.php',
+        'API\\LeagueAPI\\Objects\\matchTimelineFrame' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/matchTimelineFrame.php',
+        'API\\LeagueAPI\\Objects\\matchTimelineParticipantDetails' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/matchTimelineParticipantDetails.php',
+        'API\\LeagueAPI\\Objects\\matchTimelinePosition' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/matchTimelinePosition.php',
+        'API\\LeagueAPI\\Objects\\objectInit' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/objectInit.php',
+        'API\\dbCall\\dbCall' => __DIR__ . '/..' . '/aaa/API/src/DB/dbFunctions.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
@@ -1922,59 +1982,6 @@ class ComposerStaticInit653aa1a7387064700d09c3fdb742aeca
         'Laravel\\Tinker\\Console\\TinkerCommand' => __DIR__ . '/..' . '/laravel/tinker/src/Console/TinkerCommand.php',
         'Laravel\\Tinker\\TinkerCaster' => __DIR__ . '/..' . '/laravel/tinker/src/TinkerCaster.php',
         'Laravel\\Tinker\\TinkerServiceProvider' => __DIR__ . '/..' . '/laravel/tinker/src/TinkerServiceProvider.php',
-        'LeagueAPI\\LeagueAPI' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/leagueAPI.php',
-        'LeagueAPI\\Objects\\ActiveGame' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/ActiveGame.php',
-        'LeagueAPI\\Objects\\ActiveParticipant' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/ActiveParticipant.php',
-        'LeagueAPI\\Objects\\Ban' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/bans.php',
-        'LeagueAPI\\Objects\\BanActive' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/banActiveGame.php',
-        'LeagueAPI\\Objects\\ChallengerLeagues' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/ChallengerLeagues.php',
-        'LeagueAPI\\Objects\\ChallengerLeaguesEntry' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/ChallengerLeaguesEntry.php',
-        'LeagueAPI\\Objects\\LeagueEntries' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/LeagueEntries.php',
-        'LeagueAPI\\Objects\\LeagueEntriesMiniSeries' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/LeagueEntriesMiniSeries.php',
-        'LeagueAPI\\Objects\\LeagueSummoner' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/LeagueSummoner.php',
-        'LeagueAPI\\Objects\\Match' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/matchlist.php',
-        'LeagueAPI\\Objects\\MatchById' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/matchById.php',
-        'LeagueAPI\\Objects\\MatchList' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/matchlist.php',
-        'LeagueAPI\\Objects\\Observer' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/Observer.php',
-        'LeagueAPI\\Objects\\Participant' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/participants.php',
-        'LeagueAPI\\Objects\\ParticipantIdentity' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/participantIdentities.php',
-        'LeagueAPI\\Objects\\Perk' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/Perk.php',
-        'LeagueAPI\\Objects\\Player' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/player.php',
-        'LeagueAPI\\Objects\\Stat' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/stats.php',
-        'LeagueAPI\\Objects\\StaticData\\StaticChampion' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticChampion.php',
-        'LeagueAPI\\Objects\\StaticData\\StaticChampionBlock' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticChampionBlock.php',
-        'LeagueAPI\\Objects\\StaticData\\StaticChampionFull' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticChampionFull.php',
-        'LeagueAPI\\Objects\\StaticData\\StaticChampionImage' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticChampionImage.php',
-        'LeagueAPI\\Objects\\StaticData\\StaticChampionInfo' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticChampionInfo.php',
-        'LeagueAPI\\Objects\\StaticData\\StaticChampionItem' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticChampionItem.php',
-        'LeagueAPI\\Objects\\StaticData\\StaticChampionLeveltip' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticChampionLeveltip.php',
-        'LeagueAPI\\Objects\\StaticData\\StaticChampionList' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticChampionList.php',
-        'LeagueAPI\\Objects\\StaticData\\StaticChampionPassive' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticChampionPassive.php',
-        'LeagueAPI\\Objects\\StaticData\\StaticChampionRecommended' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticChampionRecommended.php',
-        'LeagueAPI\\Objects\\StaticData\\StaticChampionSkin' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticChampionSkin.php',
-        'LeagueAPI\\Objects\\StaticData\\StaticChampionSpell' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticChampionSpell.php',
-        'LeagueAPI\\Objects\\StaticData\\StaticChampionStat' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticChampionStat.php',
-        'LeagueAPI\\Objects\\StaticData\\StaticGold' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticItemGold.php',
-        'LeagueAPI\\Objects\\StaticData\\StaticImage' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticItemImage.php',
-        'LeagueAPI\\Objects\\StaticData\\StaticInventoryDataStats' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticItemInventoryDataStats.php',
-        'LeagueAPI\\Objects\\StaticData\\StaticItem' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticItem.php',
-        'LeagueAPI\\Objects\\StaticData\\StaticItemGroup' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticItemGroup.php',
-        'LeagueAPI\\Objects\\StaticData\\StaticItemList' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticItemList.php',
-        'LeagueAPI\\Objects\\StaticData\\StaticItemTree' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticItemTree.php',
-        'LeagueAPI\\Objects\\StaticData\\StaticSpellVars' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/StaticData/StaticChampionSpellVars.php',
-        'LeagueAPI\\Objects\\Summoner' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/summoner.php',
-        'LeagueAPI\\Objects\\Team' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/teams.php',
-        'LeagueAPI\\Objects\\Timeline' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/timeline.php',
-        'LeagueAPI\\Objects\\championMasteries' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/championMasteries.php',
-        'LeagueAPI\\Objects\\championMasteriesByChampion' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/championMasteriesByChampion.php',
-        'LeagueAPI\\Objects\\championMasteriesFrame' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/championMasteriesFrame.php',
-        'LeagueAPI\\Objects\\gameCustomizationObjects' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/gameCustomizationObjects.php',
-        'LeagueAPI\\Objects\\matchTimeline' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/matchTimeline.php',
-        'LeagueAPI\\Objects\\matchTimelineEvent' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/matchTimelineEvent.php',
-        'LeagueAPI\\Objects\\matchTimelineFrame' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/matchTimelineFrame.php',
-        'LeagueAPI\\Objects\\matchTimelineParticipantDetails' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/matchTimelineParticipantDetails.php',
-        'LeagueAPI\\Objects\\matchTimelinePosition' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/matchTimelinePosition.php',
-        'LeagueAPI\\Objects\\objectInit' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/objectInit.php',
         'League\\Flysystem\\AdapterInterface' => __DIR__ . '/..' . '/league/flysystem/src/AdapterInterface.php',
         'League\\Flysystem\\Adapter\\AbstractAdapter' => __DIR__ . '/..' . '/league/flysystem/src/Adapter/AbstractAdapter.php',
         'League\\Flysystem\\Adapter\\AbstractFtpAdapter' => __DIR__ . '/..' . '/league/flysystem/src/Adapter/AbstractFtpAdapter.php',

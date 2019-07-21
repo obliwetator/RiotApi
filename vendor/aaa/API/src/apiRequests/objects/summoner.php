@@ -1,7 +1,7 @@
 <?php
 
-namespace LeagueAPI\Objects;
-
+namespace API\LeagueAPI\Objects;
+use API\LeagueAPI\Objects\objectInit;
 
 class Summoner extends objectInit
 {

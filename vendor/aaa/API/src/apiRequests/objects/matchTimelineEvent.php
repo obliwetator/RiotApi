@@ -4,40 +4,41 @@
 //  Model Generated using http://www.jsoncafe.com/ 
 //  Created on June 17, 2019
 
-namespace LeagueAPI\Objects;
+namespace API\LeagueAPI\Objects;
+use API\LeagueAPI\Objects\objectInit;
 
 class matchTimelineEvent extends objectInit
 {
-	/** @var Integer[] $assistingParticipantIds */
+	/** @var int[] $assistingParticipantIds */
     public $assistingParticipantIds;
-	/** @var String $buildingType */
+	/** @var string $buildingType */
     public $buildingType;
-	/** @var Integer $creatorId */
+	/** @var int $creatorId */
     public $creatorId;
-	/** @var Integer $itemId */
+	/** @var int $itemId */
     public $itemId;
-	/** @var Integer $killerId */
+	/** @var int $killerId */
     public $killerId;
-	/** @var String $laneType */
+	/** @var string $laneType */
     public $laneType;
-	/** @var String $levelUpType */
+	/** @var string $levelUpType */
     public $levelUpType;
-	/** @var Integer $participantId */
+	/** @var int $participantId */
     public $participantId;
 	/** @var matchTimelinePosition $position */
     public $position;
-	/** @var Integer $skillSlot */
+	/** @var int $skillSlot */
     public $skillSlot;
-	/** @var Integer $teamId */
+	/** @var int $teamId */
     public $teamId;
-	/** @var Integer $timestamp */
+	/** @var int $timestamp */
     public $timestamp;
-	/** @var String $towerType */
+	/** @var string $towerType */
     public $towerType;
-	/** @var String $type */
+	/** @var string $type */
     public $type;
-	/** @var Integer $victimId */
+	/** @var int $victimId */
     public $victimId;
-	/** @var String $wardType */
+	/** @var string $wardType */
     public $wardType;
 }

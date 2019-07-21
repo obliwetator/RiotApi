@@ -1,7 +1,7 @@
 <?php
 
-namespace LeagueAPI\Objects\StaticData;
-use LeagueAPI\Objects\objectInit;
+namespace API\LeagueAPI\Objects\StaticData;
+use API\LeagueAPI\Objects\objectInit;
 
 class StaticInventoryDataStats extends objectInit
 {

@@ -4,7 +4,7 @@
 //  Model Generated using http://www.jsoncafe.com/ 
 //  Created on June 17, 2019
 
-namespace LeagueAPI\Objects;
+namespace API\LeagueAPI\Objects;
 
 class matchTimelinePosition extends objectInit
 {

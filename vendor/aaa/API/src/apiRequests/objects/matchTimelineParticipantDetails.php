@@ -1,27 +1,28 @@
 <?php
 
-namespace LeagueAPI\Objects;
+namespace API\LeagueAPI\Objects;
+use API\LeagueAPI\Objects\objectInit;
 
 class matchTimelineParticipantDetails extends objectInit
 {
-	/** @var Integer $participantId */
+	/** @var int $participantId */
 	public $participantId;
 	/** @var matchTimelinePosition $position */
 	public $position;
-	/** @var Integer $currentGold */
+	/** @var int $currentGold */
 	public $currentGold;
-	/** @var Integer $totalGold */
+	/** @var int $totalGold */
 	public $totalGold;
-	/** @var Integer $level */
+	/** @var int $level */
 	public $level;
-	/** @var Integer $xp */
+	/** @var int $xp */
 	public $xp;
-	/** @var Integer $minionsKilled */
+	/** @var int $minionsKilled */
 	public $minionsKilled;
-	/** @var Integer $jungleMinionsKilled */
+	/** @var int $jungleMinionsKilled */
 	public $jungleMinionsKilled;
-	/** @var Integer $dominionScore */
+	/** @var int $dominionScore */
 	public $dominionScore;
-	/** @var Integer $teamScore */
+	/** @var int $teamScore */
 	public $teamScore;
 }

@@ -6,8 +6,9 @@
 			"autoload": 
 			{
 				"psr-4": {
-					"LeagueAPI\\" :"src/apiRequests",
-					"DragonData\\" :"src/Dragondata"
+					"API\\LeagueAPI\\" : "src/apiRequests",
+					"API\\DragonData\\" : "src/DragonData",
+					"API\\dbCall\\" : "src/DB" 
 				}
 			},
 			"description": "laala" 

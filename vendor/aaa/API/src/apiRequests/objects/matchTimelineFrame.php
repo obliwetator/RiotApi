@@ -4,9 +4,8 @@
 //  Model Generated using http://www.jsoncafe.com/ 
 //  Created on June 17, 2019
 
-namespace LeagueAPI\Objects;
-
-
+namespace API\LeagueAPI\Objects;
+use API\LeagueAPI\Objects\objectInit;
 
 class matchTimelineFrame extends objectInit
 {
@@ -14,6 +13,6 @@ class matchTimelineFrame extends objectInit
     public $participantFrames;
 	/** @var matchTimelineEvent[] $events */
     public $events;
-	/** @var Integer $timestamp*/
+	/** @var int $timestamp*/
     public $timestamp;
 }

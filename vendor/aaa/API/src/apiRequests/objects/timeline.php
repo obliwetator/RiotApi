@@ -4,7 +4,7 @@
 //  Model Generated using http://www.jsoncafe.com/ 
 //  Created on June 12, 2019
 
-namespace LeagueAPI\Objects;
+namespace API\LeagueAPI\Objects;
 
 class Timeline extends objectInit
 {

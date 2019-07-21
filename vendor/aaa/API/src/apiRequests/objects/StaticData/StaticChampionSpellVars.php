@@ -1,6 +1,6 @@
 <?php
 
-namespace LeagueAPI\Objects\StaticData;
+namespace API\LeagueAPI\Objects\StaticData;
 use LeagueAPI\Objects\objectInit;
 
 class StaticSpellVars extends objectInit
