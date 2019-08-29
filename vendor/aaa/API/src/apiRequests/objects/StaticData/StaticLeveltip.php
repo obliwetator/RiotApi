@@ -7,7 +7,7 @@
 namespace API\LeagueAPI\Objects\StaticData;
 use API\LeagueAPI\Objects\objectInit;
 
-class StaticChampionLeveltip extends objectInit
+class StaticLeveltip extends objectInit
 {
     /** @var string[] $label */
     public $label;

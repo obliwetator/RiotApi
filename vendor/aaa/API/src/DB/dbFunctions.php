@@ -3,14 +3,12 @@
 namespace API\dbCall;
 
 use API\LeagueAPI\LeagueAPI;
-use Hamcrest\Type\IsArray;
-use function GuzzleHttp\json_encode;
 
 use API\LeagueAPI\Objects;
 
 class dbCall
 {
-
+	/** @var \mysqli $conn */
 	public $conn;
 
 	private function openCon(string $dbRegion)
@@ -23,8 +21,6 @@ class dbCall
 		$conn = new \mysqli($db_server, $db_user, $db_pass, $db_database) or die("Connect failed: %s\n" . $conn->error);
 
 		$this->conn = $conn;
-
-		return $conn;
 	}
 	private function closeCon($conn)
 	{
@@ -37,7 +33,7 @@ class dbCall
 		$queryResult = $this->conn->query($query);
 		if ($queryResult == true) {
 
-			if ($queryResult->num_rows > 1) {
+			if ($queryResult->num_rows >= 1) {
 				for ($i = 0; $i < $queryResult->num_rows; $i++) {
 					$resultAssoc[$i] = $queryResult->fetch_assoc();
 				}
@@ -59,13 +55,10 @@ class dbCall
 	private function makeDbCallGetMulti(string $region, string $query)
 	{
 		$this->openCon($region);
-
 		$matches = [];
-		$row = "";
 		$x = 0;
 		if ($this->conn->multi_query($query)) {
 			do {
-				$conn = $this->conn;
 				/* store first result set */
 				if ($result = $this->conn->store_result()) {
 					if ($result->num_rows) {
@@ -129,8 +122,7 @@ class dbCall
 			$summonerDataDb = $lol->getSummonerName($region, $summonerName);
 			$this->setSummoner($region, $summonerDataDb);
 		} else {
-			$resultAssoc["class"] = "summoner";
-
+			$resultAssoc = $resultAssoc[0];
 			$summonerDataDb = new Objects\Summoner($resultAssoc);
 		}
 		return $summonerDataDb;
@@ -142,88 +134,73 @@ class dbCall
 
 		$this->makeDbCallSet($region, $insertQuery);
 	}
-	/** @return Objects\MatchList */
-	public function getMatchlist($region, string $accountId, int $limit = 10): Objects\MatchList
+	/** @return null|Objects\MatchList */
+	public function getMatchlist($region, string $accountId, int $limit)
 	{
-		$selectQuery = "SELECT * FROM `matchlist_eun1` WHERE `accountId` = '$accountId' ORDER BY `matchlist_$region`.`timestamp` DESC LIMIT $limit";
+		$selectQuery = "SELECT * FROM `matchlist_$region` WHERE `accountId` = '$accountId' ORDER BY `matchlist_$region`.`timestamp` DESC LIMIT $limit";
 
 		$resultAssoc = $this->makeDbCallGet($region, $selectQuery);
 
-		// First time we lookup. If it doesn't exist make an API request and put it in the DB.
-		if ($resultAssoc == null) {
-			// API Init
-			$lol = $this->makeApiRequest();
-			// API CALL
-			$dbMatchlist = $lol->getMatchlist($region, $accountId, null, null, null, null, null, null, $limit);
-			// DB CALL
-			$this->setMatchlist($region, $dbMatchlist, $accountId, $limit, $resultAssoc);
-		} else {
-			$result["matches"] = $resultAssoc;
-			$result["class"] = "matchlist";
-
-			$dbMatchlist = new Objects\MatchList($result);
+		if ($resultAssoc == null)
+		{
+			// We have no games in our db for that specific summoner
+			return null;
 		}
-		return $dbMatchlist;
+		else {
+			$result["matches"] = $resultAssoc;
+			$dbMatchlist = new Objects\MatchList($result);
+
+			return $dbMatchlist;
+		}
 	}
 
-	public function setMatchlist($region, Objects\MatchList $getMatchlist, string $accountId, int $limit, $resultAssoc = "false")
+	public function setMatchlist($region, Objects\MatchList $getMatchlist, string $accountId)
 	{
 		$value = "";
-		$offset = 0;
-		$dbMacthlist = null;
-
-		// That means we have no games in our DB
-		if ($resultAssoc == null) { }
-		// We have games in our DB. Get them to compare to the API games
-		else {
-			$dbMacthlist = $this->getMatchlist($region, $accountId, $limit);
+		$selectQuery2 = "";
+		// We check which of those games we have in our DB for that spacific summoner
+		// If the result returned is null that means that gameId is not in our db
+		// In this case we should get the game from the API
+		for ($i = 0; $i < sizeof($getMatchlist->matches); $i++) {
+			$matches = $getMatchlist->matches[$i];
+			$selectQuery2 .= "SELECT * FROM `matchlist_$region` WHERE `gameId` = '$matches->gameId' AND `accountId` = '$accountId';";
 		}
-		if ($dbMacthlist != null) {
-			for ($i = 0; $i < sizeof($getMatchlist->matches); $i++) {
-				if ($dbMacthlist->matches[0]->gameId == $getMatchlist->matches[$i]->gameId) {
-					$offset = $i;
-					break;
-				}
-			}
-		}
-		for ($j = 0; $j < sizeof($getMatchlist->matches); $j++) {
-			$match = $getMatchlist->matches[$j];
+		// Returns an array with the format $dbMatchlist[]["propertyName"]
+		$dbMatchlist = $this->makeDbCallGetMulti($region, $selectQuery2);
 
-			if (isset($dbMacthlist->matches[$j - $offset])) {
-				if ($dbMacthlist->matches[$j - $offset]->gameId == $getMatchlist->matches[$j]->gameId) {
-					// matches match meaning we have the same matches in our DB as from the API
-					// In this case we do nothing
-				} else {
-					// no matches
-					// This happens if they player played too many matches from the last time we checked or we search for old matches
-					if ($j == sizeof($getMatchlist->matches) - 1) {
-						$value = $value . "('$accountId', '$match->gameId', '$match->platformId', '$match->champion', '$match->queue', '$match->season', '$match->timestamp', '$match->role', '$match->lane');";
+		// We get the game that matches the gameIds in our DB and check them up against the API data to decide which games we will store in our DB
+
+			for ($i = 0; $i < sizeof($dbMatchlist); $i++) {
+				// We will create the sql query if we DONT have the game in our db
+				// If we dont have the game in our DB the value of dbMatchlist array at that index will be NULL
+
+				// We dont have the game in our DB. We will create the query
+				if ($dbMatchlist[$i] == null) {
+					// Makes the construction of the query easier
+					$match = $getMatchlist->matches[$i];
+					// If its the last element of the list we ad an ;
+					if (sizeof($dbMatchlist) == $i + 1) {
+						$value .= "('$accountId', '$match->gameId', '$match->platformId', '$match->champion', '$match->queue', '$match->season', '$match->timestamp', '$match->role', '$match->lane');";
 					} else {
-						$value = $value . "('$accountId', '$match->gameId', '$match->platformId', '$match->champion', '$match->queue', '$match->season', '$match->timestamp', '$match->role', '$match->lane'), \n";
+						$value .= "('$accountId', '$match->gameId', '$match->platformId', '$match->champion', '$match->queue', '$match->season', '$match->timestamp', '$match->role', '$match->lane'), \n";
 					}
-				}
-			} else {
-				// No matching elements in our DB and API. We add it to the query
-				// Possibly flawed logic. If the next element of the DB DOESNT'T exist we finish the query 
-				if (isset($dbMacthlist->matches[$j - $offset + 1]) || $j == sizeof($getMatchlist->matches) - 1) {
-					$value = $value . "('$accountId', '$match->gameId', '$match->platformId', '$match->champion', '$match->queue', '$match->season', '$match->timestamp', '$match->role', '$match->lane');";
 				} else {
-					$value = $value . "('$accountId', '$match->gameId', '$match->platformId', '$match->champion', '$match->queue', '$match->season', '$match->timestamp', '$match->role', '$match->lane'),\n";
+					// We have the game in our DB. We do nothing in this case
 				}
 			}
+			// We initialize the $value with "" so if default present is empty it means that the value isn't set
+		if ($value != "") {
+			$insertQuery = "INSERT INTO `matchlist_$region`(`accountId`, `gameId`,`platformId`,`champion`,`queue`, `season`, `timestamp`, `role`, `lane`) VALUES $value";
+
+			$this->makeDbCallSet($region, $insertQuery);
+		} else {
+			// We have nothing to add to DB which means we do nothing
 		}
-		if ($value == null) {
-			return null;
-			// If there are no records to add do nothing
-		} else { }
-
-		$insertQuery = "INSERT INTO `matchlist_$region`(`accountId`, `gameId`,`platformId`,`champion`,`queue`, `season`, `timestamp`, `role`, `lane`) VALUES $value";
-
-		$this->makeDbCallSet($region, $insertQuery);
 	}
 
-	/** @return MatchById[] */
-	public function getMatchById(string $region, MatchList $matchlist): Objects\MatchById
+	/** Retuns an array of Matches
+	 * @return MatchById[] */
+	public function getMatchById(string $region, Objects\MatchList $matchlist): array
 	{
 		$selectQuery = "";
 		foreach ($matchlist->matches as $key => $value) {
@@ -240,16 +217,13 @@ class dbCall
 				$result[$key] = $lol->getMatchById($region, $matchlist->matches[$key]->gameId);
 				// Store the values to DB
 				$this->setMatchById($region, $result[$key]);
-				die;
 			}
 		}
 
 		// Convert to MatchById Class
 		foreach ($result as $key => $value) {
-
 			if (is_array($value)) {
 				$resultAssoc = json_decode($result[$key]["matchJson"], true);
-				$resultAssoc["class"] = "matchbyid";
 				$matchById[$key] = new Objects\MatchById($resultAssoc);
 			} else {
 				$matchById[$key] = $result[$key];
@@ -258,11 +232,11 @@ class dbCall
 		return $matchById;
 	}
 
-	public function setMatchById(string $region, Objects\MatchList $matchById)
+	public function setMatchById(string $region, Objects\MatchById $matchById)
 	{
 		$json = json_encode($matchById);
 
-		$insertQuery = "INSERT INTO `gamebyid_eun1` (`gameId`, `matchJson`) VALUES ('$matchById->gameId', '$json')";
+		$insertQuery = "INSERT IGNORE INTO `gamebyid_eun1` (`gameId`, `matchJson`) VALUES ('$matchById->gameId', '$json')";
 
 		$this->makeDbCallSet($region, $insertQuery);
 	}

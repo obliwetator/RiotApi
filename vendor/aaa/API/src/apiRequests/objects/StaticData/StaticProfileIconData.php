@@ -3,16 +3,12 @@
 namespace API\LeagueAPI\Objects\StaticData;
 use API\LeagueAPI\Objects\objectInit;
 
-class StaticChampionList extends objectInit
+class StaticProfileIconData extends objectInit
 {
-	/** @var string[] $keys */
-	public $keys;
-	/** @var StaticChampion[] $data */
+	/** @var StaticProfileIconDetails[] $data */
 	public $data;
 	/** @var string $version */
 	public $version;
 	/** @var string $type */
 	public $type;
-	/** @var string $format */
-	public $format;
 }

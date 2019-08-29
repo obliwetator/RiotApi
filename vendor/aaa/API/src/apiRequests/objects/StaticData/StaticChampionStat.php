@@ -19,34 +19,34 @@ class StaticChampionStat extends objectInit
     public $mpperlevel;
     /** @var int $movespeed */
     public $movespeed;
-    /** @var Float $armor */
+    /** @var float $armor */
     public $armor;
-    /** @var Float $armorperlevel */
+    /** @var float $armorperlevel */
     public $armorperlevel;
     /** @var int $spellblock */
     public $spellblock;
-    /** @var Float $spellblockperlevel */
+    /** @var float $spellblockperlevel */
     public $spellblockperlevel;
     /** @var int $attackrange */
     public $attackrange;
-    /** @var Float $hpregen */
+    /** @var float $hpregen */
     public $hpregen;
-    /** @var Float $hpregenperlevel */
+    /** @var float $hpregenperlevel */
     public $hpregenperlevel;
     /** @var int $mpregen */
     public $mpregen;
-    /** @var Float $mpregenperlevel */
+    /** @var float $mpregenperlevel */
     public $mpregenperlevel;
     /** @var int $crit */
     public $crit;
     /** @var int $critperlevel */
     public $critperlevel;
-    /** @var Float $attackdamage */
+    /** @var float $attackdamage */
     public $attackdamage;
     /** @var int $attackdamageperlevel */
     public $attackdamageperlevel;
     /** @var int $attackspeedperlevel */
     public $attackspeedperlevel;
-    /** @var Float $attackspeed */
+    /** @var float $attackspeed */
     public $attackspeed;
 }

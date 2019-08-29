@@ -2,6 +2,8 @@
 
 namespace API\DragonData;
 
+use League\Flysystem\Exception;
+
 class DragonData
 {
 	const
@@ -44,7 +46,6 @@ class DragonData
 			// Data is cached meaing it's already an array
 			return $data;
 		}
-
 		// Try to load from the web
 		$data = @file_get_contents($url);
 		if ($data == false)
@@ -194,6 +195,16 @@ class DragonData
 		return $data;
 	}
 
+	public static function getStaticSummonerSpellById(int $key, string $locale = 'en_GB', string $version = null)
+	{
+		$data = self::getStaticSummonerSpellsWithKeys($locale, $version);
+
+		if (isset($data['data'][$key]) == false) {
+			return new Exception("summoner spell not found.");
+		}
+
+		return $data['data'][$key];
+	}
 	public static function getStaticMaps (string $locale = 'en_GB', string $version = null)
 	{
 		$url = self::getStaticDataUrl(self::STATIC_MAPS, $locale, $version);

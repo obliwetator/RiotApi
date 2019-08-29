@@ -5,6 +5,9 @@ namespace API\LeagueAPI;
 use API\DragonData\DragonData;
 use API\LeagueAPI\Objects\StaticData;
 
+require 'curl.php';
+require 'functions.php';
+
 class LeagueAPI
 {
 	// $assoc determined whether the array is converted to an object(false) or an assosiative array(true)
@@ -132,18 +135,13 @@ class LeagueAPI
 
 		$data = curl($targetUrl, $this->assoc);
 
-		if (isset($data))
-		{
-			foreach ($data as $key => $value)
-			{
+		if (isset($data)) {
+			foreach ($data as $key => $value) {
 				$obj[$key] = new Objects\LeagueSummoner($value);
 			}
-			if (isset($obj)) 
-			{
+			if (isset($obj)) {
 				return $obj;
-			}
-			else 
-			{
+			} else {
 				return $obj = null;
 			}
 		}
@@ -205,7 +203,7 @@ class LeagueAPI
 	 *  RANKED_TFT,
 	 *  RANKED_FLEX_SR,
 	 *  RANKED_FLEX_TT.
-	 * 
+	 *
 	 * This function can return null
 	 * @param mixed $region
 	 *
@@ -218,16 +216,12 @@ class LeagueAPI
 		$data = curl($targetUrl, $this->assoc, $additionalParameters);
 
 		if (isset($data)) {
-			foreach ($data as $key => $value) 
-			{
+			foreach ($data as $key => $value) {
 				$obj[$key] = new Objects\LeagueEntries($value);
 			}
-			if (isset($obj))
-			{
+			if (isset($obj)) {
 				return $obj;
-			}
-			else
-			{
+			} else {
 				return $obj = null;
 			}
 		}
@@ -250,10 +244,6 @@ class LeagueAPI
 			$data = DragonData::getStaticChampionsWithKeys($locale, $version);
 		} else {
 			$data = DragonData::getStaticChampions($locale, $version);
-		}
-
-		if (!$data) {
-			throw new ServerException('StaticData failed to be loaded.');
 		}
 		// Create missing data
 		$data['keys'] = array_map(function ($d) use ($data_by_key) {
@@ -306,53 +296,72 @@ class LeagueAPI
 		return new StaticData\StaticItem($data);
 	}
 
-	public function getStaticProfileIcons(string $locale = 'en_GB', string $version = null)
+	public function getStaticProfileIcons(string $locale = 'en_GB', string $version = null): StaticData\StaticProfileIconData
 	{
-		return DragonData::getStaticProfileIcons($locale, $version);
+		$data = DragonData::getStaticProfileIcons($locale, $version);
+
+		return new StaticData\StaticProfileIconData($data);
 	}
 
-	public function getStaticRunesReforged(string $locale = 'en_GB', string $version = null)
+	/** Retrieve reforged rune path.
+	 *
+	 * This will retrieve all the runes and they ARE organized by the Paths ( 8100, 8200 .. etc)
+	 */
+	public function getStaticReforgedRunePaths(string $locale = 'en_US', string $version = null): StaticData\StaticRunesReforgedPathList
+	{
+		// Fetch StaticData from JSON files
+		$data = DragonData::getStaticRunesReforged($locale, $version);
+
+		// Create missing data
+		$r = [];
+		foreach ($data as $path)
+			$r[$path['id']] = $path;
+		$data = ['paths' => $r];
+
+		// Parse array and create instances
+		return new StaticData\StaticRunesReforgedPathList($data);
+	}
+	/** Retrieve reforged rune path.
+	 *
+	 * This will retrieve all the runes and they AREN'T organized by the Paths
+	 */
+	public function getStaticRunesReforged(string $locale = 'en_GB', string $version = null): StaticData\StaticRunesReforgedList
 	{
 		$data = DragonData::getStaticRunesReforged($locale, $version);
-		// alter the data a bit
+
 		$r = [];
-		$ar = [];
-		$arr = [];
-		foreach ($data as $key => $value) {
-			foreach ($value as $key2 => $value2) {
-				if ('slots' == $key2) {
-					foreach ($value2 as $key3 => $value3) {
-						foreach ($value3['runes'] as $key3 => $value3) {
-							$r[$value3['id']] = $value3;
-						}
-					}
-				} else {
-					$ar[$key2] = $value2;
+		foreach ($data as $path) {
+			foreach ($path['slots'] as $slot) {
+				foreach ($slot['runes'] as $item) {
+					$r[$item['id']] = $item;
 				}
 			}
-			$ar['runes'] = $r;
-			$arr[$ar['id']] = $ar;
-			// Reset the array
-			$r = [];
 		}
+		$data = ['runes' => $r];
 
-		return $arr;
+
+		return new StaticData\StaticRunesReforgedList($data);
 	}
-
-	public function getStaticSummonerSpell(string $locale = 'en_GB', string $version = null, $key = true)
+	/** Get all summoner spells
+	 *
+	 * $key value determines whether we get an array that indexes the Summoner Spells by their ID or their name. Default is ID
+	 */
+	public function getStaticSummonerSpells(string $locale = 'en_GB', string $version = null, $key = true) : StaticData\StaticSummonerSpellList
 	{
-		$data = false;
 		// We alter the array to be able to search by spell ID. Makes things much easier.
 		if (true == $key) {
 			$data = DragonData::getStaticSummonerSpellsWithKeys($locale, $version);
 		} else {
 			$data = DragonData::getStaticSummonerSpells($locale, $version);
 		}
-		if (false == $data) {
-			throw new Exception('Static data for summoner spell not found', 404);
-		}
+		return new StaticData\StaticSummonerSpellList($data);
+	}
 
-		return $data;
+	public function getStaticSummonerSpell(int $key, string $locale = 'en_GB', string $version = null)
+	{
+		$data = DragonData::getStaticSummonerSpellById($key, $locale, $version);
+
+		return new StaticData\StaticSummonerSpell($data);
 	}
 
 	/** This will return ONLY the current active maps.*/

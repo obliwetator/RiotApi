@@ -11,6 +11,15 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', 'PagesController@home');
+Route::get('/test', 'PagesController@test');
+Route::get('/summoner', 'PagesController@summoner');
+
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/test', function ()
+{
+    return view('test');
 });

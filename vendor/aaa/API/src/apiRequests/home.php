@@ -1,8 +1,5 @@
 <?php
 
-require '../../../API/functions/functions.php';
-require '../../../API/src/apiRequests/curl.php';
-
 require '../../../../../../API/vendor/autoload.php';
 
 use Tracy\Debugger;
@@ -14,21 +11,33 @@ Debugger::$maxDepth = 10; // default: 3
 use API\LeagueAPI\LeagueAPI;
 use API\dbCall\dbCall;
 
-$lol = new LeagueAPI();
-$db = new dbCall();
+// $lol = new LeagueAPI();
+// $db = new dbCall();
 
-$limit = 5;
 
 $region = "eun1";
 $locale = "en_GB";
 $version = "9.13.1";
 
-$a = $lol->getSummonerName($region, "tiltmachine");
+$beginIndex = 0;
+$endIdex = 100;
 
-$db->setSummoner($region, $a);
-$b = $lol->getLeagueSummoner($region, $a->id);
 
-pr($b);
+
+
+$lol = new LeagueAPI();
+$db = new dbCall();
+// $summoner = $lol->getSummonerName("eun1", "tiltmachine");
+// $icons = $lol->getStaticProfileIcons("en_GB", "9.13.1");
+// $matchlist = $lol->getMatchlist("eun1", $summoner->accountId, null, null, null, null , null, null, 10);
+// $db->setMatchlist("eun1", $matchlist, $summoner->accountId, 0, 5);
+// $matchById = $lol->getMatchById("eun1", $matchlist->matches[0]->gameId);
+
+$dbSummoner = $db->getSummoner($region, "tiltmachine");
+$v = $db->getMatchlist($region, $dbSummoner->accountId, $endIdex);
+
+
+
 
 // pr($lol->getMatchById("eun1", 2000000000));
 // $b = $db->getMatchlist($region, $a->accountId, $limit);
@@ -78,3 +87,31 @@ pr($b);
 // $matchlist = $db->getMatchlist($region, $summoner->accountId, $limit);
 // $matchById = $db->getMatchById($region, $matchlist);
 // dump($matchById);
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+	<title>Document</title>
+</head>
+<body>
+	<div id="comments"></div>
+
+<button>Hey</button>
+</body>
+<script>
+
+$(document).ready(function() {
+	$("button").click(function() {
+		$("#comments").load("load-comments.php");
+	});
+});
+</script>
+</html>

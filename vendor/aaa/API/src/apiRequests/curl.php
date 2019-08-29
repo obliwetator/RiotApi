@@ -68,7 +68,7 @@ function curl($targetUrl, $assoc = false, $additionalParameters = null)
 	// $assoc determined whether the array is converted to an object or an assosiative array
 	$data = json_decode($sBody, $assoc);
 
-	pr($aHeaders);
+	//  pr($aHeaders);
 
 	// check for response code and proceed accordingly
 
