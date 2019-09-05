@@ -24,6 +24,7 @@ class LeagueAPI
 
 		$summoner = new Objects\Summoner($data);
 		// Remove Spaces and save name with proper capitalization
+		// $summoner->nameInputSanitization($summoner->name);
 		$summoner->trimmedName = str_replace(' ', '', $summoner->name);
 
 		return $summoner;

@@ -87,7 +87,7 @@ class DragonData
 		// The key variable is used ONLY for champions folder which contanains individual champion details.
 		// Otherwise it will always be null
 		// sample url for the champion folder
-		// ""https://ddragon.leagueoflegends.com/cdn/9.13.1/data/en_US/champion/Orianna.json""
+		// ""https://ddragon.leagueoflegends.com/cdn/9.13.1/data/en_GB/champion/Orianna.json""
 		$url = "https://ddragon.leagueoflegends.com/cdn/$version/data/$locale/$type$key.json$suffix";
 		// We add the suffix to differentiate between what array we use
 

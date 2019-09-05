@@ -23,8 +23,14 @@ class Summoner extends objectInit
 	public $trimmedName;
 
 
-	private function nameInputSanitization($name)
+	public function nameInputSanitization($name)
 	{
+		// remove spaces
+		$name = str_replace(' ', '', $name);
+
+		// Remove HTML special Characters
+		$name = filter_var($name, FILTER_SANITIZE_SPECIAL_CHARS);
+		
 		// remove spaces
 		$name = str_replace(' ', '', $name);
 
@@ -33,7 +39,7 @@ class Summoner extends objectInit
 
 		// Remove horizontal Tab(&#9) control characters
 		// TODO: find better regex to replace control characters none worked. this is a workaround only for this chaarcter
-		$name = str_replace("&#9;", '', $name);
+		// $name = str_replace("&#9;", '', $name);
 
 
 		// Remove any character except [0-9], p{L} (a-Z),_,\,.
@@ -41,7 +47,8 @@ class Summoner extends objectInit
 		// FIX: regex string
 		// $name = (preg_replace('/[^0-9\\p{L}_\\.]/',"" ,$name));
 
-		return $name;
+		$this->name; 
+		$this->trimmedName;
 	}
 
 	private function nameInputValidation($name)

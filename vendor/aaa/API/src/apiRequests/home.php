@@ -22,9 +22,6 @@ $version = "9.13.1";
 $beginIndex = 0;
 $endIdex = 100;
 
-
-
-
 $lol = new LeagueAPI();
 $db = new dbCall();
 // $summoner = $lol->getSummonerName("eun1", "tiltmachine");
@@ -34,59 +31,7 @@ $db = new dbCall();
 // $matchById = $lol->getMatchById("eun1", $matchlist->matches[0]->gameId);
 
 $dbSummoner = $db->getSummoner($region, "tiltmachine");
-$v = $db->getMatchlist($region, $dbSummoner->accountId, $endIdex);
 
-
-
-
-// pr($lol->getMatchById("eun1", 2000000000));
-// $b = $db->getMatchlist($region, $a->accountId, $limit);
-// $c = $db->getMatchById($region, $b);
-// pr($c[0]);
-
-// foreach ($c[0]->participants as $key => $value)
-// {
-// 	foreach ($value->stats as $key2 => $value2)
-// 	{
-// 		if ($key2 == "item0" ||$key2 == "item1" ||$key2 == "item2" ||$key2 == "item3" ||$key2 == "item4" ||$key2 == "item5" ) 
-// 		{
-// 			if ($value2 !== 0) 
-// 			{
-// 				$item[$key][$key2] = $lol->getStaticItem($value2, $locale, $version);
-// 			}
-// 		}
-// 	}
-// }
-
-// GRILUJEME KONE
-
-// STATIC DATA
-
-// Champion
-// $data = $lol->getStaticChampion(222, false);
-
-// Item
-// $data = $lol->getStaticItem(1001);
-
-// Profile icons
-// $data = $lol->getStaticProfileIcons("en_GB", "9.13.1");
-
-// Runes
-// $data = $lol->getStaticRunesReforged("en_GB", "9.13.1");
-
-// Summoner spells
-// $data = $lol->getStaticSummonerSpell("en_GB", "9.13.1", false);
-
-// Maps
-// $data = $lol->getStaticMaps("en_GB", "9.13.1");
-
-
-// API
-// $summoner = $db->getSummoner($region, "unsponsored");
-
-// $matchlist = $db->getMatchlist($region, $summoner->accountId, $limit);
-// $matchById = $db->getMatchById($region, $matchlist);
-// dump($matchById);
 ?>
 
 <!DOCTYPE html>
@@ -99,14 +44,32 @@ $v = $db->getMatchlist($region, $dbSummoner->accountId, $endIdex);
   src="https://code.jquery.com/jquery-3.4.1.js"
   integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
   crossorigin="anonymous"></script>
+	<script src="js.js"></script>
 	<title>Document</title>
 </head>
 <body>
 	<div id="comments"></div>
 
 <button>Hey</button>
+
+<input type="button" id="button1" value="CLICK"/>
 </body>
 <script>
+
+$(document).ready(function(){
+	$('#button1').click(function(){
+		alert('kfjd');
+	});
+});
+
+$(function() {
+	var $gameItemList = $('GameListContainer');
+
+	$gameItemList.on('click', '.Button.MatchDetail', function(evt){
+		evt.preventDefault();
+
+	})
+});
 
 $(document).ready(function() {
 	$("button").click(function() {
