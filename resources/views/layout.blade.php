@@ -17,9 +17,11 @@
 <body>
 	<div class="p-0">
 		<ul class="p-0">
-			<li class="d-inline-block"><a href="/test">Test</a></li>
-			<li class="d-inline-block"><a href="/">Welcome</a></li>
-			<li class="d-inline-block"><a href="/summoner">summoner</a></li>
+			<li class="d-inline-block"><a href="/test">Test(Remove)</a></li>
+			<li class="d-inline-block"><a href="/">Home</a></li>
+			<li class="d-inline-block"><a href="/champions">Champions</a></li>
+			<li class="d-inline-block"><a href="/stats">Stats</a></li>
+			<li class="d-inline-block"><a href="/leaderboards">Leaderboards</a></li>
 			<div class="d-inline-block">
 				<div class="Region class"></div>
 				<form action="/summoner" method="GET">

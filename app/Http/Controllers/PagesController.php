@@ -21,6 +21,10 @@ class PagesController extends Controller
 
 	public function Summoner(Request $name)
 	{
+		function Champion()
+		{
+
+		}
 	    $summonerName = $name->get("name");
 
 	    // Init
@@ -59,5 +63,25 @@ class PagesController extends Controller
         }
 
 		return view('summoner')->with(['summoner' => $summoner])->with(['icons' => $icons])->with(['matchById' => $matchById])->with(['summonerSpells' => $summonerSpells])->with(['champions' => $staticChampions])->with(['items' => $staticItems])->with (['runes' => $staticRunes]);
+	}
+
+	public function championsSummoner(Request $name)
+	{
+		return view('championsSummoner');
+	}
+
+	public function champions()
+	{
+		return view('champions');
+	}
+
+	public function stats()
+	{
+		return view('stats');
+	}
+
+	public function leaderboards()
+	{
+		return view('leaderboards');
 	}
 }

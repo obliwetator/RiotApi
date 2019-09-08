@@ -13,7 +13,15 @@
 
 Route::get('/', 'PagesController@home');
 Route::get('/test', 'PagesController@test');
+
 Route::get('/summoner', 'PagesController@summoner');
+Route::get('/summoner/champions', 'PagesController@championsSummoner');
+
+Route::get('/champions','PagesController@champions');
+
+Route::get('/stats','PagesController@stats');
+
+Route::get('/leaderboards','PagesController@leaderboards');
 
 // Route::get('/', function () {
 //     return view('welcome');
