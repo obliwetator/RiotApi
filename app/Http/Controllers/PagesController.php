@@ -72,7 +72,11 @@ class PagesController extends Controller
 
 	public function champions()
 	{
-		return view('champions');
+		$file = file_get_contents('E:\xampp\htdocs\API\vendor\aaa\API\src\apiRequests\ChampionKeys.json');
+		$file = json_decode($file,true);
+
+
+		return view('champions')->with(['champions' => $file]);
 	}
 
 	public function stats()

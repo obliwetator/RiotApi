@@ -48,8 +48,9 @@
 				<div class="row">
                 <div class = "col-md-4" id = "SideContent">
 						<h1>Some Side Content</h1>
-					KDA:  {{ ($matchById[0]->participants[0]->stats->kills + $matchById[0]->participants[0]->stats->assists) / $matchById[0]->participants[0]->stats->deaths  }}
+					<p>KDA: {{ ($matchById[0]->participants[0]->stats->kills + $matchById[0]->participants[0]->stats->assists) / $matchById[0]->participants[0]->stats->deaths  }}</p>
 					<hr>
+
                 </div>
                 <div class = "col-md-6" id = "ActualContent">
 					<h1>Actual Content</h1>
@@ -72,7 +73,6 @@
 									</li>
 								</ul>
 							</div>
-							
                         </div>
                         <div class="Content">
 								<h1>Actual games (Depending on which queue is selected)</h1>
