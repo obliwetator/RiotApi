@@ -9,6 +9,7 @@
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/champion120px.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/itemSprite64.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{ asset('css/customcss.css')}}">
 	<script src="https://code.jquery.com/jquery-3.4.1.js"
 		integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"

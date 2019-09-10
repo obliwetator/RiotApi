@@ -94,31 +94,20 @@
 			</div>
 		</ul>
 </div>
-<p>Remove style tags. Add them as css</p>
 <div id="champions container">
 	@foreach ($champions["keys"] as $id => $championName)
 	<div id="individual_champion" class="custom_class list-inline-item position-relative" data-champion-name = "{{$championName}}" data-TOP = "TOP" data-MID = "MID">
 		<a href="/champions/{{$championName}}/statistics" class="d-block">
-			<div id="image" style="position:relative;display: block;width:120px;height:120px;border:2px solid #000;">
+			<div id="image" class="chmapion-stat-image">
 				<i class="__sprite __bg120 __bg120-{{$championName}}"></i>
 			</div>
 			<div id="name">{{$championName}}</div>
-			<div id="role tags" class="position-absolute" style="bottom: 25px; right: 0; text-align: right; line-height: 1">
-				<div id="add role tags" class="d-block" style="display: block;">
-					<span class="d-inline-block" style="line-height: 15px;
-					font-size: 12px;
-					letter-spacing: -0.9px;
-					color: #fff;
-					background: #353b3e;
-					padding: 1px 6px 0 4px;">Top</span>
+			<div id="role tags" class="role-tags">
+				<div class="role-tag">
+					<span >Top</span>
 				</div>
-				<div id="add role tags" class="d-block" style="display: block;">
-					<span class="d-inline-block" style="line-height: 15px;
-					font-size: 12px;
-					letter-spacing: -0.9px;
-					color: #fff;
-					background: #353b3e;
-					padding: 1px 6px 0 4px;">Middle</span>
+				<div class="role-tag">
+					<span>Middle</span>
 				</div>
 			</div>
 		</a>
