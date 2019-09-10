@@ -20,7 +20,7 @@
         <div class="SummonerInfo">
             <h1>Some info about the summoner</h1>
             <p> {{ $summoner->name }} </p>
-            <img src="/img/profileicon/{{$icons->data[$summoner->profileIconId]->image->full}}" alt="image" style="height: 5px">
+            <img src="/lolContent/img2/profileicon/{{$icons->data[$summoner->profileIconId]->image->full}}" alt="image" style="height: 5px">
             <br>
         </div>
         <div class="Menu">

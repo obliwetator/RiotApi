@@ -21,10 +21,6 @@ class PagesController extends Controller
 
 	public function Summoner(Request $name)
 	{
-		function Champion()
-		{
-
-		}
 	    $summonerName = $name->get("name");
 
 	    // Init
@@ -72,7 +68,7 @@ class PagesController extends Controller
 
 	public function champions()
 	{
-		$file = file_get_contents('E:\xampp\htdocs\API\vendor\aaa\API\src\apiRequests\ChampionKeys.json');
+		$file = file_get_contents('lolContent\data\en_GB\championFull.json');
 		$file = json_decode($file,true);
 
 
@@ -87,5 +83,11 @@ class PagesController extends Controller
 	public function leaderboards()
 	{
 		return view('leaderboards');
+	}
+
+	// The returned view will be dynamically created depending on the champion name selected
+	public function championsStat($name)
+	{
+		return view('championStats')->with(['name' => $name]);
 	}
 }

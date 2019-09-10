@@ -32,6 +32,8 @@ $db = new dbCall();
 
 $dbSummoner = $db->getSummoner($region, "tiltmachine");
 
+pr($lol->getStaticChampion(222,true));
+
 ?>
 
 <!DOCTYPE html>

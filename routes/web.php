@@ -18,6 +18,8 @@ Route::get('/summoner', 'PagesController@summoner');
 Route::get('/summoner/champions', 'PagesController@championsSummoner');
 
 Route::get('/champions','PagesController@champions');
+// Dynamic path for each champion
+Route::get('/champions/{name}/statistics', 'PagesController@championsStat');
 
 Route::get('/stats','PagesController@stats');
 
