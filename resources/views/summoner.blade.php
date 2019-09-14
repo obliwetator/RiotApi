@@ -4,9 +4,11 @@
 
 @section('content')
 
-<script src="{{ asset('js/js.js')}}"></script>
 
-    <?php /** @var API\LeagueAPI\Objects\Summoner $summoner
+
+	<?php
+	
+	 /** @var API\LeagueAPI\Objects\Summoner $summoner
      * @var API\LeagueAPI\Objects\MatchById[] $matchById[]
      * @var API\LeagueAPI\Objects\StaticData\StaticProfileIconData $icons
      * @var API\LeagueAPI\Objects\StaticData\StaticChampionList $champions
@@ -14,14 +16,28 @@
      * @var API\LeagueAPI\Objects\StaticData\StaticRunesReforgedList $runes
      * @var API\LeagueAPI\Objects\StaticData\StaticSummonerSpellList $summonerSpells
      * @var API\LeagueAPI\Objects\StaticData\
-     */ ?>
+	 */ ?>
+	 
+	 
 
     <div class="Summoner">
-        <div class="SummonerInfo">
-            <h1>Some info about the summoner</h1>
-            <p> {{ $summoner->name }} </p>
-            <img src="/lolContent/img2/profileicon/{{$icons->data[$summoner->profileIconId]->image->full}}" alt="image" style="height: 5px">
-            <br>
+        <div id="SummonerInfo Header" class="position-relative">
+			<div id="image Face" class="d-inline-block" style="verical-align: top;">
+				<div class="position-relative" id="border image Profile Icon">
+					<img src="/lolContent/img2/profileicon/{{$icons->data[$summoner->profileIconId]->image->full}}" alt="Rank icon" style="" class="d-block">
+					<span class="position-absolute" id="level" style="top: 100%; left: 40%; color: yellow; margin-top: -18px;	">{{$summoner->summonerLevel}}</span>
+				</div>
+			</div>
+			<div id="Profile" class="d-inline-block" style="height: 128px; vertical-align: top;">
+				<div id="Info">
+					<span id ="name">{{ $summoner->name }}</span>
+					<div id="Ranks">some rank</div>
+				</div>
+				<div id="Buttons"></div>
+				<button type = "button" class="btn btn-warning" id="getRequest">Get Request</button>
+			</div>
+
+        
         </div>
         <div class="Menu">
             <h1>Some menus to choose from for different stats</h1>
@@ -47,14 +63,52 @@
             <div class = "tab-pane active show" id="Summary" aria-labelledby = "Summary-tab" role="tabpanel">
 				<div class="row">
                 <div class = "col-md-4" id = "SideContent">
-						<h1>Some Side Content</h1>
-					<p>KDA: {{ ($matchById[0]->participants[0]->stats->kills + $matchById[0]->participants[0]->stats->assists) / $matchById[0]->participants[0]->stats->deaths  }}</p>
+					<div id = "tier box1">
+						<div id = "emblem" style="display: table-cell;">
+							<p>Add checks if summoner has ranks to show</p>
+							<img src="/lolContent/emblems/Emblem_{{$summonerLeague["RANKED_SOLO_5x5"]->tier}}.png" alt="{{ $summonerLeague["RANKED_SOLO_5x5"]->tier." icon"}}" style = "height: 128px; width: 128px;">
+						</div>
+						<div id = "info" style="display: table-cell">
+							<div id="Rank Type">Ranked Solo</div>
+							<div id="Tier Rank">{{$summonerLeague["RANKED_SOLO_5x5"]->tier}}  {{ $summonerLeague["RANKED_SOLO_5x5"]->rank}}</div>
+							<div id="TIer info">
+								<span id = "LP"> {{ $summonerLeague["RANKED_SOLO_5x5"]->leaguePoints. "LP /"}}</span>
+								<span id="Win/loss">
+									<span id = "win">{{ $summonerLeague["RANKED_SOLO_5x5"]->wins }}W</span>
+									<span id = "loss">{{ $summonerLeague["RANKED_SOLO_5x5"]->losses }}L</span>
+									<br>
+									<span id="winration">Win rate {{ round($summonerLeague["RANKED_SOLO_5x5"]->wins / ($summonerLeague["RANKED_SOLO_5x5"]->losses + $summonerLeague["RANKED_SOLO_5x5"]->wins) * 100, 1)}}%</span>
+								</span>
+							</div>
+							<div id="League Name"></div>
+						</div>
+					</div>
 					<hr>
+					<div id = "tier box2">
+						<div id = "emblem" style="display: table-cell;">
+								<p>Add checks if summoner has ranks to show</p>
+							<img src="/lolContent/emblems/Emblem_{{$summonerLeague["RANKED_FLEX_SR"]->tier}}.png" alt="{{ $summonerLeague["RANKED_SOLO_5x5"]->tier." icon"}}" style = "height: 128px; width: 128px;">
+						</div>
+						<div id = "info" style="display: table-cell">
+							<div id="Rank Type">Ranked Flex</div>
+							<div id="Tier Rank">{{$summonerLeague["RANKED_FLEX_SR"]->tier}}  {{ $summonerLeague["RANKED_FLEX_SR"]->rank}}</div>
+							<div id="TIer info">
+								<span id = "LP"> {{ $summonerLeague["RANKED_FLEX_SR"]->leaguePoints. "LP /"}}</span>
+								<span id="Win/loss">
+									<span id = "win">{{ $summonerLeague["RANKED_FLEX_SR"]->wins }}W</span>
+									<span id = "loss">{{ $summonerLeague["RANKED_FLEX_SR"]->losses }}L</span>
+									<br>
+									<span id="winration">Win rate {{ round($summonerLeague["RANKED_FLEX_SR"]->wins / ($summonerLeague["RANKED_FLEX_SR"]->losses + $summonerLeague["RANKED_FLEX_SR"]->wins) * 100, 1)}}%</span>
+								</span>
+							</div>
+							<div id="League Name"></div>
+						</div>
+					</div>
 
                 </div>
                 <div class = "col-md-6" id = "ActualContent">
 					<h1>Actual Content</h1>
-                    <div class="GamesContainer" id = "GamesContainer">
+                    <div class="GamesContainer" id = "">
 						<p>GamesContainer</p>
                         <div class="Header">
 							<div class="" id = "Navigation">
@@ -91,10 +145,10 @@
                     </div>
 				</div>
             </div>
-
             </div>
             <div class = "tab-pane" id="Champions" aria-labelledby = "Champions-tab" role="tabpanel">
-                <p>Some Champions</p>
+				<div id = "getRequestData"></div>
+                <p>Div class full content goes here</p>
             </div>
             <div class = "tab-pane" id="Leagues" aria-labelledby = "Leagues-tab" role="tabpanel">
                 <p>Some Leagues</p>

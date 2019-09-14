@@ -10,6 +10,7 @@ class dbCall
 {
 	/** @var \mysqli $conn */
 	public $conn;
+	
 
 	private function openCon(string $dbRegion)
 	{

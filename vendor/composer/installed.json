@@ -1,19 +1,17 @@
 [
 	{
-			"name": "aaa/API",
-			"version": "1.2.2",
-			"version_normalized": "1.2.2.0",
-			"autoload": 
-			{
-				"psr-4": {
-					"API\\LeagueAPI\\" : "src/apiRequests",
-					"API\\DragonData\\" : "src/DragonData",
-					"API\\dbCall\\" : "src/DB" 
-				}
-			},
-			"description": "laala" 
+		"name": "aaa/API",
+		"version": "1.2.2",
+		"version_normalized": "1.2.2.0",
+		"autoload": {
+			"psr-4": {
+				"API\\LeagueAPI\\": "src/apiRequests",
+				"API\\DragonData\\": "src/DragonData",
+				"API\\dbCall\\": "src/DB"
+			}
 		},
-
+		"description": "laala"
+	},
     {
         "name": "beyondcode/laravel-dump-server",
         "version": "1.2.2",
@@ -683,6 +681,66 @@
         "description": "This is the PHP port of Hamcrest Matchers",
         "keywords": [
             "test"
+        ]
+    },
+    {
+        "name": "itsgoingd/clockwork",
+        "version": "v4.0.8",
+        "version_normalized": "4.0.8.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/itsgoingd/clockwork.git",
+            "reference": "02c56826bcfb8e0eaf40afa160e761a5968a6a09"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/itsgoingd/clockwork/zipball/02c56826bcfb8e0eaf40afa160e761a5968a6a09",
+            "reference": "02c56826bcfb8e0eaf40afa160e761a5968a6a09",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.5",
+            "psr/log": "1.*"
+        },
+        "time": "2019-09-03T14:27:17+00:00",
+        "type": "library",
+        "extra": {
+            "laravel": {
+                "providers": [
+                    "Clockwork\\Support\\Laravel\\ClockworkServiceProvider"
+                ],
+                "aliases": {
+                    "Clockwork": "Clockwork\\Support\\Laravel\\Facade"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Clockwork\\": "Clockwork/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "itsgoingd",
+                "email": "itsgoingd@luzer.sk",
+                "homepage": "https://twitter.com/itsgoingd"
+            }
+        ],
+        "description": "php dev tools integrated to your browser",
+        "homepage": "https://underground.works/clockwork",
+        "keywords": [
+            "Devtools",
+            "debugging",
+            "laravel",
+            "logging",
+            "lumen",
+            "profiling",
+            "slim"
         ]
     },
     {

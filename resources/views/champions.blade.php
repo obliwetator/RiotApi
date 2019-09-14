@@ -7,6 +7,7 @@
 <script>
 
 	$(function(){
+		// Filter champions function
 		$('.champion_filter').on('click', '.nav-link', function(){
 			var $filterList = $(this).closest('.champion_filter').find('.nav-link'),
 			filterType = $(this).data("filterType"),
@@ -45,6 +46,7 @@
                 }
 			});
 		});
+		// Search function
 		$('.class_input input').on('keyup keydown change', function()
 		{
 			var keyword = $(this).val().toLowerCase().replace(/[~!#$^&*=+|:;?"<,.>'\s]/g, ''),

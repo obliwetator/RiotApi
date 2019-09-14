@@ -1,7 +1,7 @@
 /* Always include */
 .__sprite{ display:inline-block; text-indent:-99999px;}
 /* 120px x 120px big sprites  ----------------START---------------- */
-.__bg120 {background-image:url("../img/spritesChampions120.png");}
+.__bg120 {background-image:url("../img/output.webp");}
 .__bg120-Aatrox { width: 120px;height: 120px;background-position: 0px 0px;}
 .__bg120-Ahri {	width: 120px;height: 120px;background-position: -120px -0;}
 .__bg120-Akali { width: 120px; height: 120px;background-position: -0 -120px;}

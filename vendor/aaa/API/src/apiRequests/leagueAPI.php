@@ -128,7 +128,15 @@ class LeagueAPI
 		return curl($targetUrl, $this->assoc);
 	}
 
-	/** This function can return null.
+	/** Valid Game Modes
+	 *  RANKED_SOLO_5x5,
+	 *  RANKED_TFT,
+	 *  RANKED_FLEX_SR,
+	 *  RANKED_FLEX_TT.
+	 * 
+	 * This function can return null.
+	 *
+	 *  @param mixed $region
 	 *  @return Objects\LeagueSummoner[] */
 	public function getLeagueSummoner(string $region, string $summonerId)
 	{
@@ -138,7 +146,8 @@ class LeagueAPI
 
 		if (isset($data)) {
 			foreach ($data as $key => $value) {
-				$obj[$key] = new Objects\LeagueSummoner($value);
+				// Name the array values after their corresponsing league to find the easier
+				$obj[$value["queueType"]] = new Objects\LeagueSummoner($value);
 			}
 			if (isset($obj)) {
 				return $obj;

@@ -15,7 +15,7 @@ Route::get('/', 'PagesController@home');
 Route::get('/test', 'PagesController@test');
 
 Route::get('/summoner', 'PagesController@summoner');
-Route::get('/summoner/champions', 'PagesController@championsSummoner');
+Route::get('/summoner/champions', 'PagesController@summonerChampions');
 
 Route::get('/champions','PagesController@champions');
 // Dynamic path for each champion
@@ -25,6 +25,15 @@ Route::get('/stats','PagesController@stats');
 
 Route::get('/leaderboards','PagesController@leaderboards');
 
+
+
+
+Route::get('/getRequest', function(){
+	if(Request::ajax()){
+		return 'getReuqest has been loaded';
+	}
+});
+
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -33,3 +42,4 @@ Route::get('/test', function ()
 {
     return view('test');
 });
+
