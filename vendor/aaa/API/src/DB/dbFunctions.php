@@ -88,7 +88,7 @@ class dbCall
 		$this->openCon($region);
 
 		$queryResult = $this->conn->query($query);
-
+		
 		if ($queryResult == true) {
 			$mySqliWarning = $this->conn->get_warnings();
 
@@ -191,6 +191,7 @@ class dbCall
 			}
 			// We initialize the $value with "" so if default present is empty it means that the value isn't set
 		if ($value != "") {
+			$insertQueryP = "INSERT INTO `matchlist_$region` (`accountId`, `gameId`,`platformId`,`champion`,`queue`, `season`, `timestamp`, `role`, `lane`) VALUES (";
 			$insertQuery = "INSERT INTO `matchlist_$region`(`accountId`, `gameId`,`platformId`,`champion`,`queue`, `season`, `timestamp`, `role`, `lane`) VALUES $value";
 
 			$this->makeDbCallSet($region, $insertQuery);
@@ -208,6 +209,7 @@ class dbCall
 			$selectQuery = $selectQuery . "SELECT * FROM `gamebyid_eun1` WHERE `gameId` = " . $matchlist->matches[$key]->gameId . ";\n";
 		}
 		$result = $this->makeDbCallGetMulti($region, $selectQuery);
+
 		// Find Missing games
 		foreach ($result as $key => $value) {
 			if (isset($value)) {

@@ -1,13 +1,12 @@
 @extends('layout')
 
-@section('title', 'summoner')
+@section('title',$summoner->name)
 
 @section('content')
 
 
 
 	<?php
-	
 	 /** @var API\LeagueAPI\Objects\Summoner $summoner
      * @var API\LeagueAPI\Objects\MatchById[] $matchById[]
      * @var API\LeagueAPI\Objects\StaticData\StaticProfileIconData $icons
@@ -64,27 +63,53 @@
 				<div class="row">
                 <div class = "col-md-4" id = "SideContent">
 					<div id = "tier box1">
+						@if (isset($summonerLeague["RANKED_SOLO_5x5"]))
 						<div id = "emblem" style="display: table-cell;">
-							<p>Add checks if summoner has ranks to show</p>
-							<img src="/lolContent/emblems/Emblem_{{$summonerLeague["RANKED_SOLO_5x5"]->tier}}.png" alt="{{ $summonerLeague["RANKED_SOLO_5x5"]->tier." icon"}}" style = "height: 128px; width: 128px;">
-						</div>
-						<div id = "info" style="display: table-cell">
-							<div id="Rank Type">Ranked Solo</div>
-							<div id="Tier Rank">{{$summonerLeague["RANKED_SOLO_5x5"]->tier}}  {{ $summonerLeague["RANKED_SOLO_5x5"]->rank}}</div>
-							<div id="TIer info">
-								<span id = "LP"> {{ $summonerLeague["RANKED_SOLO_5x5"]->leaguePoints. "LP /"}}</span>
-								<span id="Win/loss">
-									<span id = "win">{{ $summonerLeague["RANKED_SOLO_5x5"]->wins }}W</span>
-									<span id = "loss">{{ $summonerLeague["RANKED_SOLO_5x5"]->losses }}L</span>
-									<br>
-									<span id="winration">Win rate {{ round($summonerLeague["RANKED_SOLO_5x5"]->wins / ($summonerLeague["RANKED_SOLO_5x5"]->losses + $summonerLeague["RANKED_SOLO_5x5"]->wins) * 100, 1)}}%</span>
-								</span>
+								<p>Add checks if summoner has ranks to show</p>
+								<img src="/lolContent/emblems/Emblem_{{$summonerLeague["RANKED_SOLO_5x5"]->tier}}.png" alt="{{ $summonerLeague["RANKED_SOLO_5x5"]->tier." icon"}}" style = "height: 128px; width: 128px;">
 							</div>
-							<div id="League Name"></div>
-						</div>
+							<div id = "info" style="display: table-cell">
+								<div id="Rank Type">Ranked Solo</div>
+								<div id="Tier Rank">{{$summonerLeague["RANKED_SOLO_5x5"]->tier}}  {{ $summonerLeague["RANKED_SOLO_5x5"]->rank}}</div>
+								<div id="TIer info">
+									<span id = "LP"> {{ $summonerLeague["RANKED_SOLO_5x5"]->leaguePoints. "LP /"}}</span>
+									<span id="Win/loss">
+										<span id = "win">{{ $summonerLeague["RANKED_SOLO_5x5"]->wins }}W</span>
+										<span id = "loss">{{ $summonerLeague["RANKED_SOLO_5x5"]->losses }}L</span>
+										<br>
+										<span id="winration">Win rate {{ round($summonerLeague["RANKED_SOLO_5x5"]->wins / ($summonerLeague["RANKED_SOLO_5x5"]->losses + $summonerLeague["RANKED_SOLO_5x5"]->wins) * 100, 1)}}%</span>
+									</span>
+								</div>
+								<div id="League Name"></div>
+							</div>
+						@else
+						<div id = "emblem" style="display: table-cell;">
+								<img src="/lolContent/emblems/Emblem_Provisional.png" alt="provisional icon" style = "height: 128px; width: 128px;">
+							</div>
+							<div id = "info" style="display: table-cell">
+								<div id="Rank Type">Ranked Solo</div>
+								<div id="Tier Rank">Uranked</div>
+								<div id="TIer info">
+									<span id = "LP"> </span>
+									<span id="Win/loss">
+										<span id = "win"></span>
+										<span id = "loss"></span>
+										<br>
+										<span id="winration"></span>
+									</span>
+								</div>
+								<div id="League Name"></div>
+							</div>
+						@endif
+
 					</div>
 					<hr>
 					<div id = "tier box2">
+						@php
+							// We check if the summoner has a flex rank
+						@endphp
+						@if (isset($summonerLeague["RANKED_FLEX_SR"]))
+
 						<div id = "emblem" style="display: table-cell;">
 								<p>Add checks if summoner has ranks to show</p>
 							<img src="/lolContent/emblems/Emblem_{{$summonerLeague["RANKED_FLEX_SR"]->tier}}.png" alt="{{ $summonerLeague["RANKED_SOLO_5x5"]->tier." icon"}}" style = "height: 128px; width: 128px;">
@@ -103,6 +128,30 @@
 							</div>
 							<div id="League Name"></div>
 						</div>
+						@else
+
+						@php
+							// If the summoner doesnt have a rank we display an empty border
+						@endphp
+						<div id = "emblem" style="display: table-cell;">
+							<img src="/lolContent/emblems/Emblem_Provisional.png" alt="provisional icon" style = "height: 128px; width: 128px;">
+						</div>
+						<div id = "info" style="display: table-cell">
+							<div id="Rank Type">Ranked Flex</div>
+							<div id="Tier Rank">Unranked</div>
+							<div id="TIer info">
+								<span id = "LP"> </span>
+								<span id="Win/loss">
+									<span id = "win"></span>
+									<span id = "loss"></span>
+									<br>
+									<span id="winration"></span>
+								</span>
+							</div>
+							<div id="League Name"></div>
+						</div>
+						@endif
+
 					</div>
 
                 </div>
