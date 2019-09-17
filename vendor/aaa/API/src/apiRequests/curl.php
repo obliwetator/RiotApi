@@ -8,7 +8,6 @@ define('APIKEY', env('API_KEY'));
 function curl($targetUrl, $assoc = false, $additionalParameters = null)
 {
 
-	dd(APIKEY);
 	$curl = curl_init();
 
 	// Depending if we have additional parameters to pass we choose the right call constructor
