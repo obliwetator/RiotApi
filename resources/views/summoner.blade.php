@@ -16,8 +16,6 @@
      * @var API\LeagueAPI\Objects\StaticData\StaticSummonerSpellList $summonerSpells
      * @var API\LeagueAPI\Objects\StaticData\
 	 */ ?>
-	 
-	 
 
     <div class="Summoner">
         <div id="SummonerInfo Header" class="position-relative">
@@ -65,7 +63,6 @@
 					<div id = "tier box1">
 						@if (isset($summonerLeague["RANKED_SOLO_5x5"]))
 						<div id = "emblem" style="display: table-cell;">
-								<p>Add checks if summoner has ranks to show</p>
 								<img src="/lolContent/emblems/Emblem_{{$summonerLeague["RANKED_SOLO_5x5"]->tier}}.png" alt="{{ $summonerLeague["RANKED_SOLO_5x5"]->tier." icon"}}" style = "height: 128px; width: 128px;">
 							</div>
 							<div id = "info" style="display: table-cell">
@@ -111,7 +108,6 @@
 						@if (isset($summonerLeague["RANKED_FLEX_SR"]))
 
 						<div id = "emblem" style="display: table-cell;">
-								<p>Add checks if summoner has ranks to show</p>
 							<img src="/lolContent/emblems/Emblem_{{$summonerLeague["RANKED_FLEX_SR"]->tier}}.png" alt="{{ $summonerLeague["RANKED_SOLO_5x5"]->tier." icon"}}" style = "height: 128px; width: 128px;">
 						</div>
 						<div id = "info" style="display: table-cell">

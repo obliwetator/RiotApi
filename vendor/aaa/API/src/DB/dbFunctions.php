@@ -112,7 +112,7 @@ class dbCall
 	{
 		$summonerName = str_replace(' ', '', $summonerName);
 
-		$selectQuery = "SELECT * FROM `lol_database_$region`.`summoner_$region` WHERE `trimmedName` = '$summonerName'";
+		$selectQuery = "SELECT * FROM `summoner_$region` WHERE `trimmedName` = '$summonerName'";
 
 		$resultAssoc = $this->makeDbCallGet("$region", $selectQuery);
 

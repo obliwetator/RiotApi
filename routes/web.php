@@ -28,6 +28,11 @@ Route::get('/leaderboards','PagesController@leaderboards');
 
 
 
+Route::get('/statistics', function(){
+	return view('statistics');
+});
+
+
 Route::get('/getRequest', function(){
 	if(Request::ajax()){
 		return 'getReuqest has been loaded';
