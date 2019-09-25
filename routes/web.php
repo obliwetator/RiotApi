@@ -15,6 +15,9 @@ Route::get('/', 'PagesController@home');
 Route::get('/test', 'PagesController@test');
 
 Route::get('/summoner', 'PagesController@summoner');
+Route::post('/summoner', 'ajaxController@summoner');
+	
+
 Route::get('/summoner/champions', 'PagesController@summonerChampions');
 
 Route::get('/champions','PagesController@champions');

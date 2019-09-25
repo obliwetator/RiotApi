@@ -20,6 +20,7 @@
 		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 		
 	<script src="{{ asset('js/js.js')}}"></script>
+	@yield('js')
 </head>
 
 <body>
@@ -46,9 +47,6 @@
 		<hr>
 		<p>Footer stuff(Edit in layout file)</p>
 	</div>
-
-
-
 </body>
 
 </html>

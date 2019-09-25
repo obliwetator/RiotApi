@@ -30,9 +30,16 @@ $db = new dbCall();
 // $db->setMatchlist("eun1", $matchlist, $summoner->accountId, 0, 5);
 // $matchById = $lol->getMatchById("eun1", $matchlist->matches[0]->gameId);
 
-$dbSummoner = $db->getSummoner($region, "tiltmachine");
+$match = $lol->getMatchById("ready", [222]);
 
-pr($lol->getStaticChampion(222,true));
+$match[0]->participants[0]->stats->item0;
+for ($i; $i < sizeof($match); $i++) { 
+	foreach ($match as $key => $value) {
+		$name[$key] = $match[$i]->participantIdentities[$key]->player->summonerName;
+		$profileIconId[$key] = $match[$i]->participantIdentities[$key]->player->profileIcon;
+	}
+}
+
 
 ?>
 

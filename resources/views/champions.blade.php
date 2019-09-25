@@ -1,5 +1,5 @@
 @extends('layout')
-
+	
 @section('title', 'Champions')
 
 @section('content')

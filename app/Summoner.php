@@ -22,4 +22,8 @@ class Summoner extends Model
 	public $summonerLevel;
 	/** @var string $trimmedName */
 	public $trimmedName;
+
+	protected $primaryKey = '$accountId';
+	public $incrementing = false;
+	protected $keyType = 'string';
 }

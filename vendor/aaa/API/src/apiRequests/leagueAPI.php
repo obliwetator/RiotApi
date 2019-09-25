@@ -14,10 +14,28 @@ class LeagueAPI
 	private $assoc = true;
 
 	// API CALLS
-	public function getSummonerName(string $region, string $summonerName): Objects\Summoner
+	/** @return Objects\Summoner[] */
+	public function getSummonerName(string $region,array $summonerName)
+	{	
+		
+		foreach ($summonerName as $key => $summonerN) {
+			$summonerN = str_replace(' ', '', $summonerN);
+			$targetUrls[$key] = "https://{$region}.api.riotgames.com/lol/summoner/v4/summoners/by-name/{$summonerN}";
+		}
+		$data = multiCurl($targetUrls, $this->assoc);
+		foreach ($data as $key => $value) {
+
+			$summoner[$key] = new Objects\Summoner($value);
+			// Remove Spaces and save name with proper capitalization
+			// $summoner->nameInputSanitization($summoner->name);
+			$summoner[$key]->trimmedName = str_replace(' ', '', $summoner[$key]->name);
+		}
+
+		return $summoner;
+	}
+
+	public function getSummonerNameSingle(string $region, string $summonerName)
 	{
-		// remove spaces
-		$summonerName = str_replace(' ', '', $summonerName);
 		$targetUrl = "https://{$region}.api.riotgames.com/lol/summoner/v4/summoners/by-name/{$summonerName}";
 
 		$data = curl($targetUrl, $this->assoc);
@@ -53,7 +71,6 @@ class LeagueAPI
 		$targetUrl = "https://{$region}.api.riotgames.com/lol/summoner/v4/summoners/by-account/{$summonerAccountId}";
 
 		$data = curl($targetUrl, $this->assoc);
-
 		return new Objects\Summoner($data);
 	}
 
@@ -73,14 +90,21 @@ class LeagueAPI
 
 		return new Objects\MatchList($data);
 	}
+	/** @var Objects\MatchById[] $matchById
+	 * 	@return Objects\MatchById[]
+	 */
+	public function getMatchById(string $region, array $matchIds): array
+	{		
+		foreach ($matchIds as $key => $matchId) {
+            $targetUrl[$key] = "https://{$region}.api.riotgames.com/lol/match/v4/matches/{$matchId}";
+		}
 
-	public function getMatchById(string $region, int $matchId): Objects\MatchById
-	{
-		$targetUrl = "https://{$region}.api.riotgames.com/lol/match/v4/matches/{$matchId}";
+		$data = multiCurl($targetUrl, $this->assoc);
 
-		$data = curl($targetUrl, $this->assoc);
-
-		return new Objects\MatchById($data);
+		foreach ($data as $key => $value) {
+			$matchById[$key] = new Objects\MatchById($value);
+		}
+		return $matchById;
 	}
 
 	public function getMatchTimeline(string $region, int $matchId): Objects\matchTimeline
@@ -137,13 +161,33 @@ class LeagueAPI
 	 * This function can return null.
 	 *
 	 *  @param mixed $region
+	 * 	@param Objects\Summoner[][] $summoners
 	 *  @return Objects\LeagueSummoner[] */
-	public function getLeagueSummoner(string $region, string $summonerId)
+	public function getLeagueSummoner(string $region, array $summoners)
+
 	{
-		$targetUrl = "https://{$region}.api.riotgames.com/lol/league/v4/entries/by-summoner/{$summonerId}";
+		foreach ($summoners as $key => $summonersGame) {
+			foreach ($summonersGame as $key2 => $summoner) {
+				dd($summonersGame);
+				$targetUrl[$key][$key2] = "https://{$region}.api.riotgames.com/lol/league/v4/entries/by-summoner/{$summoner}";
+			}
 
-		$data = curl($targetUrl, $this->assoc);
+		}
 
+
+		$data = multiCurl($targetUrl, $this->assoc);
+
+		dd($data);
+
+		foreach ($data as $key => $value) {
+			foreach ($value as $key2 => $value2) {
+				if ($value2 === false || $value2 === true) {
+					// we convert the true/false to an int
+					$data[$key][$key2] = (int)$value2;
+				}
+
+			}
+		}
 		if (isset($data)) {
 			foreach ($data as $key => $value) {
 				// Name the array values after their corresponsing league to find the easier
@@ -155,7 +199,7 @@ class LeagueAPI
 				return $obj = null;
 			}
 		}
-	}
+	}	
 
 	/** Valid Game Modes
 	 *  RANKED_SOLO_5x5,
@@ -180,7 +224,7 @@ class LeagueAPI
 	 *  RANKED_FLEX_SR,
 	 *  RANKED_FLEX_TT.
 	 *
-	 * @param mixed $region
+	 * @param string $region
 	 */
 	public function getGrandmasterLeagues(string $region, string $gameMode): Objects\ChallengerLeagues
 	{
@@ -197,7 +241,7 @@ class LeagueAPI
 	 *  RANKED_FLEX_SR,
 	 *  RANKED_FLEX_TT.
 	 *
-	 * @param mixed $region
+	 * @param string $region
 	 */
 	public function getMasterLeague(string $region, string $gameMode): Objects\ChallengerLeagues
 	{
@@ -215,7 +259,7 @@ class LeagueAPI
 	 *  RANKED_FLEX_TT.
 	 *
 	 * This function can return null
-	 * @param mixed $region
+	 * @param string $region
 	 *
 	 * @return Objects\LeagueEntries[] */
 	public function getLeagueEntries(string $region, string $gameMode, string $division, string $tier, int $page = null)
