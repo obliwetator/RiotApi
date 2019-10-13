@@ -68,6 +68,7 @@ return array(
     'API\\LeagueAPI\\Objects\\matchTimelineFrame' => $vendorDir . '/aaa/API/src/apiRequests/objects/matchTimelineFrame.php',
     'API\\LeagueAPI\\Objects\\matchTimelineParticipantDetails' => $vendorDir . '/aaa/API/src/apiRequests/objects/matchTimelineParticipantDetails.php',
     'API\\LeagueAPI\\Objects\\matchTimelinePosition' => $vendorDir . '/aaa/API/src/apiRequests/objects/matchTimelinePosition.php',
+    'API\\LeagueAPI\\Objects\\miniSeries' => $vendorDir . '/aaa/API/src/apiRequests/objects/miniSeries.php',
     'API\\LeagueAPI\\Objects\\objectInit' => $vendorDir . '/aaa/API/src/apiRequests/objects/objectInit.php',
     'API\\dbCall\\dbCall' => $vendorDir . '/aaa/API/src/DB/dbFunctions.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',

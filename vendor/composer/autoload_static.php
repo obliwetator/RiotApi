@@ -463,6 +463,7 @@ class ComposerStaticInit653aa1a7387064700d09c3fdb742aeca
         'API\\LeagueAPI\\Objects\\matchTimelineFrame' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/matchTimelineFrame.php',
         'API\\LeagueAPI\\Objects\\matchTimelineParticipantDetails' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/matchTimelineParticipantDetails.php',
         'API\\LeagueAPI\\Objects\\matchTimelinePosition' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/matchTimelinePosition.php',
+        'API\\LeagueAPI\\Objects\\miniSeries' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/miniSeries.php',
         'API\\LeagueAPI\\Objects\\objectInit' => __DIR__ . '/..' . '/aaa/API/src/apiRequests/objects/objectInit.php',
         'API\\dbCall\\dbCall' => __DIR__ . '/..' . '/aaa/API/src/DB/dbFunctions.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',

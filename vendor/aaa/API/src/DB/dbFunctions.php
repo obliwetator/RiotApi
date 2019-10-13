@@ -55,6 +55,42 @@ class dbCall
 
 	private function makeDbCallGetMulti(string $region, string $query)
 	{
+
+		$this->openCon($region);
+		$matches = [];
+		$x = 0;
+		if ($this->conn->multi_query($query)) {
+			do {
+				/* store first result set */
+				if ($result = $this->conn->store_result()) {
+					if ($result->num_rows > 1) {
+						for ($i=0; $i < $result->num_rows; $i++) { 
+							$matches[$x][$i] = $result->fetch_assoc();
+						}
+					}
+					elseif ($result->num_rows == 1) {
+						$matches[$x] = $result->fetch_assoc();
+					} else {
+						$matches[$x] = null;
+					}
+					$x++;
+					$result->free();
+				}
+
+				if ($this->conn->more_results()) {
+					// DO something between results
+
+				} else {
+					break;
+				}
+			} while ($this->conn->next_result());
+		}
+		$this->closeCon($this->conn);
+		return $matches;
+	}
+
+	private function makeDbCallGetMultiLeague(string $region, string $query)
+	{
 		$this->openCon($region);
 		$matches = [];
 		$x = 0;
@@ -63,7 +99,9 @@ class dbCall
 				/* store first result set */
 				if ($result = $this->conn->store_result()) {
 					if ($result->num_rows) {
-						$matches[$x] = $result->fetch_assoc();
+						for ($i=0; $i < $result->num_rows; $i++) { 
+							$matches[$x][$i] = $result->fetch_assoc();
+						}
 					} else {
 						$matches[$x] = null;
 					}
@@ -134,28 +172,56 @@ class dbCall
 	}
 	public function getSummoners(string $region, array $summonerNames)
 	{
-		$selectQuery = "SELECT * FROM `summoner_$region` WHERE 'trimmedName' = ";
+		$selectQuery = "";
 		foreach ($summonerNames as $key => $summoner) {
 			$summoner = str_replace(' ', '', $summoner);
-			if (array_key_last($summonerNames) == $key) {
-				$selectQuery .= "'$summoner';";
-			}
-			else{
-				$selectQuery .= "'$summoner' AND 'trimmedName' =";
-			}
 
+			$selectQuery .= "SELECT * FROM `summoner_$region` WHERE `accountId` = '$summoner';";
 		}
-		$resultAssoc = $this->makeDbCallGetMulti($region, $selectQuery);
+		$resultDb = $this->makeDbCallGetMulti($region, $selectQuery);
+
 
 		// First time we lookup. If it doesn't exist make an API request and put it in the DB.
-		if ($resultAssoc[0] == null) {
-			$lol = $this->makeApiRequest();
-			$summonersDataDb = $lol->getSummonerName($region, $summonerNames);
-			$this->setSummoner($region, $summonersDataDb);
-		} else {
-			$summonersDataDb = new Objects\Summoner($resultAssoc);
+        foreach ($resultDb as $key => $summoner) {
+            if ($resultDb[$key] == null) {
+                $summonerToFind[$key] = $summonerNames[$key];
+			}
+			
+            if (isset($summonerToFind)) {
+				$lol = $this->makeApiRequest();
+
+				$result = $lol->getSummonerName($region, $summonerToFind);
+                $this->setSummoner($region, $result);
+            } else {
+
+            }
 		}
-		return $summonersDataDb;
+		if (isset($result)) {
+			foreach ($resultDb as $key => $value) {
+				if (isset($value)) {
+					$result[$key] = $value;
+				}
+			}
+			// Then we sort those 2 arrays by their key
+			ksort($result);
+		}
+		else{
+			foreach ($resultDb as $key => $value) {
+				if (isset($value)) {
+					$result[$key] = $value;
+				}
+			}
+		}
+		// Convert to MatchById Class
+		foreach ($result as $key => $summoner) {
+			if (is_object($summoner)) {
+				$SummonerData[$key] = $result[$key];
+			} else {
+				$SummonerData[$key] = new Objects\Summoner($summoner);
+
+			}
+		}
+		return $SummonerData;
 	}
 	/** @param Objects\Summoner[] $summoner */
 	public function setSummoner(string $region, $summoners)
@@ -190,7 +256,7 @@ class dbCall
 
 		$resultAssoc = $this->makeDbCallGet($region, $selectQuery);
 
-
+		// No matchlist in DB
 		if ($resultAssoc == null)
 		{
 			$lol = $this->makeApiRequest();
@@ -200,8 +266,18 @@ class dbCall
 			return $dbMatchlist;
 		}
 		else {
-			$result["matches"] = $resultAssoc;
-			$dbMatchlist = new Objects\MatchList($result);
+			// The requested ammount of games dont match the games we have in our DB. Try to get them
+			if (sizeof($resultAssoc) < $limit) {
+				$lol = $this->makeApiRequest();
+				$dbMatchlist = $lol->getMatchlist($region, $accountId, $queue, $season, $champion, $beginTime, $endTime, $beginIndex, $limit);
+
+
+				$this->setMatchlist($region, $dbMatchlist, $accountId);
+			}
+			else{
+				$result["matches"] = $resultAssoc;
+				$dbMatchlist = new Objects\MatchList($result);
+			}
 
 			return $dbMatchlist;
 		}
@@ -218,8 +294,11 @@ class dbCall
 			$matches = $getMatchlist->matches[$i];
 			$selectQuery2 .= "SELECT * FROM `matchlist_$region` WHERE `gameId` = '$matches->gameId' AND `accountId` = '$accountId';";
 		}
+
+
 		// Returns an array with the format $dbMatchlist[]["propertyName"]
 		$dbMatchlist = $this->makeDbCallGetMulti($region, $selectQuery2);
+
 
 		// We get the game that matches the gameIds in our DB and check them up against the API data to decide which games we will store in our DB
 
@@ -243,7 +322,6 @@ class dbCall
 			}
 			// We initialize the $value with "" so if default present is empty it means that the value isn't set
 		if ($value != "") {
-			$insertQueryP = "INSERT INTO `matchlist_$region` (`accountId`, `gameId`,`platformId`,`champion`,`queue`, `season`, `timestamp`, `role`, `lane`) VALUES (";
 			$insertQuery = "INSERT INTO `matchlist_$region`(`accountId`, `gameId`,`platformId`,`champion`,`queue`, `season`, `timestamp`, `role`, `lane`) VALUES $value";
 
 			$this->makeDbCallSet($region, $insertQuery);
@@ -308,6 +386,58 @@ class dbCall
 		return $matchById;
 	}
 
+	public function getMatchByIdSingle(string $region, $gameId)
+	{
+		$selectQuery = "";
+
+		$selectQuery = $selectQuery . "SELECT * FROM `gamebyid_eun1` WHERE `gameId` = '$gameId'";
+
+		$resultDb = $this->makeDbCallGet($region, $selectQuery);
+		// Find Missing games
+		foreach ($resultDb as $key => $value) {
+			if (isset($value)) {
+				// We have the match. No actions taken.
+			} else {
+				// We dont have that match in our DB. We will check the matchlist to see which game we don't have and download it from the API.
+				$gamesToFind[$key] = $gameId;
+			}
+		}
+		if (isset($gamesToFind)) {
+			$lol = $this->makeApiRequest();
+			$result = $lol->getMatchById($region, $gamesToFind);
+
+			// Store the values to DB
+			$this->setMatchById($region, $result);
+		}
+		// We combine the Db array and the APi array since we may have mising games in our DB
+		// On repeat requests we will have all the games in our db. No need to check
+		if (isset($result)) {
+			foreach ($resultDb as $key => $value) {
+				if (isset($value)) {
+					$result[$key] = $value;
+				}
+			}
+			// Then we sort those 2 arrays by their key
+			ksort($result);
+		}
+		else {
+			foreach ($resultDb as $key => $value) {
+				if (isset($value)) {
+					$result[$key] = $value;
+				}
+			}
+		}
+		// Convert to MatchById Class
+		foreach ($result as $key => $value) {
+			if (is_array($value)) {
+				$resultAssoc = json_decode($result[$key]["matchJson"], true);
+				$matchById[$key] = new Objects\MatchById($resultAssoc);
+			} else {
+				$matchById[$key] = $result[$key];
+			}
+		}
+		return $matchById;
+	}
 
 
 	/**
@@ -334,23 +464,36 @@ class dbCall
 		$this->makeDbCallSet($region, $insertQuery);
 	}
 	/** @param \API\LeagueAPI\Objects\LeagueSummoner[][][] $summonersLeagues */
-	public function setLeagueBySummoner(string $region,array $summonersLeagues)
+	public function setLeagueBySummoner(string $region,$summonersLeagues, $entriesToFind = null)
 	{
-		$insertQuery = "INSERT IGNORE INTO `leaguebysummoner_eun1` (`id`, `name`, `queueType`, `tier`, `rank`, `leagueId`, `leaguePoints`, `wins`, `losses`, `veteran`, `inactive`, `freshBlood`, `hotStreak`) VALUES ";
-		
-		// we will get an array of arrays of arrays -> object
+		$insertQuery = "INSERT IGNORE INTO `leaguebysummoner_eun1` (`summonerId`, `summonerName`, `queueType`, `tier`, `rank`, `leagueId`, `leaguePoints`, `wins`, `losses`, `veteran`, `inactive`, `freshBlood`, `hotStreak`, `isNull`) VALUES ";
+		// If a single value is passed
 		foreach ($summonersLeagues as $key => $match) {
 			foreach ($match as $key2 => $participants) {
-				foreach ($participants as $key3 => $league) {
-					if (array_key_last($summonersLeagues) == $key && array_key_last($match) == $key2 && array_key_last($participants) == $key3){
-						$insertQuery .= "('$league->summonerId', '$league->summonerName', '$league->queueType', '$league->tier', '$league->rank', '$league->leagueId', '$league->leaguePoints', '$league->wins', '$league->losses', '$league->veteran', '$league->inactive', '$league->freshBlood', '$league->hotStreak');";
+					if ($participants == null) {
+						$entry = $entriesToFind[$key][$key2];
+						if (array_key_last($summonersLeagues) == $key && array_key_last($match) == $key2) {
+							$insertQuery .= "('$entry', null, 'Unranked', null, null, null, null, null, null, null, null, null, null, 1);";
+						}
+						else{
+							$insertQuery .= "('$entry', null, 'Unranked', null, null, null, null, null, null, null, null, null, null, 1),";
+						}
 					}
-					else {
-						$insertQuery .= "('$league->summonerId', '$league->summonerName', '$league->queueType', '$league->tier', '$league->rank', '$league->leagueId', '$league->leaguePoints', '$league->wins', '$league->losses', '$league->veteran', '$league->inactive', '$league->freshBlood', '$league->hotStreak'),";
+					else{
+						foreach ($participants as $key3 => $league) {
+					
+							if (array_key_last($summonersLeagues) == $key && array_key_last($match) == $key2 && array_key_last($participants) == $key3){
+								$insertQuery .= "('$league->summonerId', '$league->summonerName', '$league->queueType', '$league->tier', '$league->rank', '$league->leagueId', '$league->leaguePoints', '$league->wins', '$league->losses', '$league->veteran', '$league->inactive', '$league->freshBlood', '$league->hotStreak', '0');";
+							}
+							else {
+								$insertQuery .= "('$league->summonerId', '$league->summonerName', '$league->queueType', '$league->tier', '$league->rank', '$league->leagueId', '$league->leaguePoints', '$league->wins', '$league->losses', '$league->veteran', '$league->inactive', '$league->freshBlood', '$league->hotStreak', '0'),";
+							}
+						}
 					}
-				}
 			}
 		}
+	
+			// we will get an array of arrays of arrays -> object
 		$this->makeDbCallSet($region,$insertQuery);
 	}
 	/** 
@@ -359,63 +502,152 @@ class dbCall
 	*/
 	public function getLeagueSummoner(string $region, array $match)
 	{
-		$selectQuery = "";
+		// Find unique summoners
+		// If the $match array has more than 1 element we will compare those arrays for unique summoners
+		clock()->startEvent("ifMassacre", "ifMassacre");
+		$mirror = $match;
 
-        foreach ($match as $key => $summoners) {
-			foreach ($summoners as $key2 => $summoner) {
-					$selectQuery .= "SELECT * FROM `leaguebysummoner_eun1` WHERE `id` = '$summoner->id';";
+		if (sizeof($match) > 1){
+			foreach ($match as $key => $summoners) {
+				foreach ($summoners as $key2 => $summoner) { 
+					if(isset($match[$key + 1])) {
+    	                for ($i=0; $i < sizeof($summoners); $i++) {
+    	                    if (isset($match[$key + 1][$key2])) {
+    	                        if ($match[$key + 1][$key2] == $match[$key][$i]) {
+									$duplicateEntry[$key + 1][$key2] = $match[$key + 1][$key2];
+									$summonersIndex[$key][$i] = $match[$key][$i];
+								}
+    	                    }
+    	                }
+    	            }
+				}
+				// reorganize the array
+				// $mirror[$key] = array_values($mirror[$key]);
 			}
-			$resultDb = $this->makeDbCallGetMulti($region, $selectQuery);
+			$match = $mirror;
 		}
 
-		dd($match);
-		die;
+		clock()->endEvent("ifMassacre");
 
-		// Find Missing Entries
+		$selectQuery = "";
+        foreach ($match as $key => $summoners) {
+			foreach ($summoners as $key2 => $summoner) {
+				$selectQuery .= "SELECT * FROM `leaguebysummoner_eun1` WHERE `summonerId` = '$summoner';";
+			}
+			$resultDb[$key] = $this->makeDbCallGetMulti($region, $selectQuery);
+			//   Reset the query
+			$selectQuery = "";
+		}
+		// Find Missing Entries 
 		foreach ($resultDb as $key => $value) {
-			if (!$value == null) {
-				// We have the entry. No actions taken.
-			} else {
-				// We dont have that entry in our DB. We will check the summoners to see which game we don't have and download it from the API.
-				$entriesToFind[$key] = $match[$key];
+			foreach ($value as $key2 => $value2) {
+				if (!$value2 == null) {
+					// We have the entry. No actions taken.
+
+				} else {
+					// We dont have that entry in our DB. We will check the summoners to see which game we don't have and download it from the API.
+					$entriesToFind[$key][$key2] = $match[$key][$key2];
+				}
 			}
 		}
 
 		if (isset($entriesToFind)) {
 
 			$lol = $this->makeApiRequest();
-			$result = $lol->getLeagueSummoner($region, $entriesToFind);
-			dd($result);
-			// Store the values to DB
-			$this->setLeagueBySummoner($region, $result);
-		}
 
-		// We combine the Db array and the APi array since we may have mising games in our DB
-		// On repeat requests we will have all the games in our db. No need to check
-		if (isset($result)) {
-			foreach ($resultDb as $key => $value) {
-				if (isset($value)) {
-					$result[$key] = $value;
+			$result = $lol->getLeagueSummoner($region, $entriesToFind);
+			if(isset($duplicateEntry))
+			{
+				// Remove duplicate games when adding to DB
+				foreach ($duplicateEntry as $key => $value) {
+            	    foreach ($value as $key2 => $value2) {
+            	        // If we have an entry as a duplicate and its NOT in the result that means its in the resultDb array
+            	        if (isset($result[$key][$key2])) {
+            	            $result[$key][$key2] = $result[$key][$key2];
+            	            unset($result[$key][$key2]);
+            	        }
+            	    }
 				}
 			}
-			// Then we sort those 2 arrays by their key
-			ksort($result);
-		}
 
-		// Convert to MatchById Class
-		foreach ($result as $key => $value) {
-			if (is_array($value)) {
-				$resultAssoc = json_decode($result[$key], true);
-				$matchById[$key] = new Objects\MatchById($resultAssoc);
-			} else {
-				$matchById[$key] = $result[$key];
+
+			// Store the values to DB
+			$this->setLeagueBySummoner($region, $result, $entriesToFind);
+
+			// Re-add the duplicate games to pass it to the view
+			foreach ($result as $key => $value) {
+				foreach ($value as $key2 => $value2) {
+					$result[$key][$key2] = $result[$key][$key2];
+				}
+				ksort($result[$key]);
 			}
+		};
+
+		$selectQuery = "";
+        foreach ($match as $key => $summoners) {
+			foreach ($summoners as $key2 => $summoner) {
+				$selectQuery .= "SELECT * FROM `leaguebysummoner_eun1` WHERE `summonerId` = '$summoner';";
+			}
+			$resultDb[$key] = $this->makeDbCallGetMulti($region, $selectQuery);
+			//   Reset the query
+			$selectQuery = "";
 		}
-		return $matchById;
+
+		// Reorganize the DB array
+		foreach ($resultDb as $key => $match) {
+			foreach ($match as $key2 => $value) {
+				if (isset($value)) {
+					if (isset($value["summonerId"])) {
+							unset($resultDb[$key][$key2]);
+							$resultDb[$key][$key2][$value["queueType"]] =  new Objects\LeagueSummoner($value);
+					}
+					else {
+
+						foreach ($value as $key3 => $value2) {
+							unset($resultDb[$key][$key2][$key3]);
+							$resultDb[$key][$key2][$value2["queueType"]] = new Objects\LeagueSummoner($value2);	
+						}
+					}
+				}
+			}
+			ksort($resultDb[$key]); 
+		}
+		$result = $resultDb;
+
+		// // We combine the Db array and the APi array since we may have mising games in our DB
+		// // On repeat requests we will have all the games in our db. No need to check 
+		// if (isset($resultDb)) {
+		// 	if (isset($result)) {
+		// 		foreach ($resultDb as $key => $value) {
+		// 			if (isset($value)) {
+		// 				$result[$key] = $value;
+		// 			}
+		// 		}
+		// 		// Then we sort those 2 arrays by their key
+		// 		ksort($result);
+		// 	}
+		// 	else{
+		// 		$result = $resultDb;
+		// 	}
+		//}
+
+		return $result;
+	}
+	 
+	public function getLeagueSummonerSingle(string $region, string $accountId)
+	{
+		$selectQuery = "SELECT * FROM `leaguebysummoner_eun1` WHERE `summonerId` = '$accountId';";
+
+		$data = $this->makeDbCallGet($region,$selectQuery);
 
 
+		foreach ($data as $key => $value) {
+			$entry[$value["queueType"]] = new Objects\LeagueSummoner($value);
+		}
 
-    }
+
+		return $entry;
+	}
 	public function getTimeline(string $region)
 	{
 		throw new Exception("Unimplemented");

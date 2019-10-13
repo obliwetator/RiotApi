@@ -20,25 +20,37 @@
 		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 		
 	<script src="{{ asset('js/js.js')}}"></script>
+	<link rel="stylesheet" href="{{ asset('css/dark-mode.css') }}">
 	@yield('js')
+	<meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
 <body>
-	<div class="p-0">
+	<div class="p-0 bg-light">
 		<ul class="p-0">
 			<li class="d-inline-block"><a href="/test">Test(Remove)</a></li>
 			<li class="d-inline-block"><a href="/">Home</a></li>
 			<li class="d-inline-block"><a href="/champions">Champions</a></li>
 			<li class="d-inline-block"><a href="/stats">Stats</a></li>
 			<li class="d-inline-block"><a href="/leaderboards">Leaderboards</a></li>
-			<div class="d-inline-block">
-				<div class="Region class"></div>
-				<form action="/summoner" method="GET">
-					<input type="text" class="Summoner name" name="name" placeholder="Summoner name">
-					<button>Submit</button>
-				</form>
-			</div>
+			<li class="d-inline-block">
+				<div >
+					<div class="Region class"></div>
+					<form action="/summoner" method="GET">
+						<input type="text" class="Summoner name" name="name" placeholder="Summoner name">
+						<button>Submit</button>
+					</form>
+				</div>
+			</li>
+			<li class="d-inline-block">
+				<div class="custom-control custom-switch d-inline-block">
+					<input type="checkbox" class="custom-control-input" id="darkSwitch">
+					<label class="custom-control-label" for="darkSwitch">Dark Mode</label>
+				</div> 
+			</li>
+
 		</ul>
+		<script src="{{ asset('js/dark-mode-switch.min.js') }}"></script>
 	</div>
 	<div class="main">
 		@yield('content')

@@ -20,7 +20,7 @@ class PagesController extends Controller
 
 	public function Summoner(Request $name)
 	{
-		clock()->startEvent("test", "test");
+		clock()->startEvent("PageControllerView", "PageControllerView");
 
 		$summonerName = $name->get("name");
 
@@ -28,8 +28,6 @@ class PagesController extends Controller
 		$lol = new LeagueAPI();
 		$db = new dbCall();
 
-
-		
 		// Const?
 		$region = 'eun1';
 		$locale = 'en_GB';
@@ -43,14 +41,10 @@ class PagesController extends Controller
 		$staticChampions  =  $lol->getStaticChampions(true, $locale, $version);
 		$staticItems =  $lol->getStaticItems($locale, $version);
 		$staticRunes = $lol->getStaticRunesReforged($locale, $version);
-		//
 
 		$summoner = $db->getSummoner($region, $summonerName);
-
-
 		$matchlist = $db->getMatchlist($region, $summoner->accountId, $limit);
 
-		dd($matchlist);
 
 		// Load initial data
 		// If we have a DB matchlist we try to get DB matchById
@@ -68,34 +62,20 @@ class PagesController extends Controller
 		// find all the summonners from the games
 		foreach ($matchById as $key => $value) {
 			foreach ($value->participantIdentities as $key2 => $value2) {
-				
-				$summonerNameMatch[$key2] = $value2->player->summonerName;
+				$summonerNameName[$key2] = $value2->player->summonerName;
 			}
-			die;
-			$summonerNameMatchObj[$key] = $db->getSummoners($region, $summonerNameMatch);
-
-			$db->setSummoner($region, $summonerNameMatchObj[$key]);
+			$summonerNameObj[$key] = $summonerNameName;
 		}
-		dd($summonerNameMatchObj);
-		$summonerLeague = $db->getLeagueSummoner($region, $summonerNameMatchObj);
+		// --------------------------------------------- // 
+		$summonerLeagueTarget = $db->getLeagueSummonerSingle($region, $summoner->id);
 
-		dd($summonerLeague);
-		if (isset($summonerLeague)) {
-			$summonerLeague = $lol->getLeagueSummoner($region, $value->participantIdentities[$key2]->player->summonerId);
-		}
+		// $db->setLeagueBySummoner($region,$summonerLeague);		
 
-
-	
-		// to get league summoner we need summoner ids
-		$la = $db->getLeagueSummoner($region, $summonerNameMatchObj);
-		
-
-		// $db->setLeagueBySummoner($region,$summonerLeague);
-
-		
 		// 0 SOLO, 1 FLEX, 2 3v3, 3 TFT
-		clock()->endEvent("test");
+		clock()->endEvent("PageControllerView");
 		clock()->endEvent("SummonerView");
+		
+
 		
 		return view('summoner')
 		->with(['summoner' => $summoner])
@@ -105,7 +85,8 @@ class PagesController extends Controller
 		->with(['champions' => $staticChampions])
 		->with(['items' => $staticItems])
 		->with(['runes' => $staticRunes])
-		->with(['summonerLeagueTarget' => $summonerLeagueTarget]);
+		->with(['summonerLeagueTarget' => $summonerLeagueTarget])
+		->with(['sumonerNameObj' => $summonerNameObj]);
 	}
 
 	

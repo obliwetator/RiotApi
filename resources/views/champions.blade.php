@@ -101,7 +101,7 @@
 	<div id="individual_champion" class="custom_class list-inline-item position-relative" data-champion-name = "{{$championName}}" data-TOP = "TOP" data-MID = "MID">
 		<a href="/champions/{{$championName}}/statistics" class="d-block">
 			<div id="image" class="chmapion-stat-image">
-				<i class="__sprite __bg120 __bg120-{{$championName}}"></i>
+				<div class="__bg120 {{$championName}}"></div>
 			</div>
 			<div id="name">{{$championName}}</div>
 			<div id="role tags" class="role-tags">

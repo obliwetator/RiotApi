@@ -17,11 +17,11 @@ class LeagueAPI
 	/** @return Objects\Summoner[] */
 	public function getSummonerName(string $region,array $summonerName)
 	{	
-		
 		foreach ($summonerName as $key => $summonerN) {
 			$summonerN = str_replace(' ', '', $summonerN);
-			$targetUrls[$key] = "https://{$region}.api.riotgames.com/lol/summoner/v4/summoners/by-name/{$summonerN}";
+			$targetUrls[$key] = "https://{$region}.api.riotgames.com/lol/summoner/v4/summoners/by-account/{$summonerN}";
 		}
+
 		$data = multiCurl($targetUrls, $this->assoc);
 		foreach ($data as $key => $value) {
 
@@ -48,30 +48,63 @@ class LeagueAPI
 		return $summoner;
 	}
 
-	public function getSummonerId(string $region, string $summonerId): Objects\Summoner
+	public function getSummonerId(string $region, array $summonerId): Objects\Summoner
 	{
-		$targetUrl = "https://{$region}.api.riotgames.com/lol/summoner/v4/summoners/{$summonerId}";
+		foreach ($summonerId as $key => $summonerN) {
+			$summonerN = str_replace(' ', '', $summonerN);
+			$targetUrls[$key] = "https://{$region}.api.riotgames.com/lol/summoner/v4/summoners/by-name/{$summonerN}";
+		}
 
-		$data = curl($targetUrl, $this->assoc);
+		$data = multiCurl($targetUrls, $this->assoc);
+		dd($data);
+		foreach ($data as $key => $value) {
 
-		return new Objects\Summoner($data);
+			$summoner[$key] = new Objects\Summoner($value);
+			// Remove Spaces and save name with proper capitalization
+			// $summoner->nameInputSanitization($summoner->name);
+			$summoner[$key]->trimmedName = str_replace(' ', '', $summoner[$key]->name);
+		}
+
+		return $summoner;
 	}
 
-	public function getSummonerPuuId(string $region, string $puuId): Objects\Summoner
+	public function getSummonerPuuId(string $region, array $puuId): Objects\Summoner
 	{
-		$targetUrl = "https://{$region}.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/{$puuId}";
+		foreach ($puuId as $key => $summonerN) {
+			$summonerN = str_replace(' ', '', $summonerN);
+			$targetUrls[$key] = "https://{$region}.api.riotgames.com/lol/summoner/v4/summoners/{$summonerN}";
+		}
 
-		$data = curl($targetUrl, $this->assoc);
+		$data = multiCurl($targetUrls, $this->assoc);
+		foreach ($data as $key => $value) {
 
-		return new Objects\Summoner($data);
+			$summoner[$key] = new Objects\Summoner($value);
+			// Remove Spaces and save name with proper capitalization
+			// $summoner->nameInputSanitization($summoner->name);
+			$summoner[$key]->trimmedName = str_replace(' ', '', $summoner[$key]->name);
+		}
+
+		return $summoner;
 	}
 
-	public function getSummonerAccountId(string $region, string $summonerAccountId): Objects\Summoner
+	public function getSummonerAccountId(string $region, array $summonerAccountId): Objects\Summoner
 	{
-		$targetUrl = "https://{$region}.api.riotgames.com/lol/summoner/v4/summoners/by-account/{$summonerAccountId}";
+		foreach ($summonerAccountId as $key => $summonerN) {
+			$summonerN = str_replace(' ', '', $summonerN);
+			$targetUrls[$key] = "https://{$region}.api.riotgames.com/lol/summoner/v4/summoners/by-account/{$summonerN}";
+		}
 
-		$data = curl($targetUrl, $this->assoc);
-		return new Objects\Summoner($data);
+		$data = multiCurl($targetUrls, $this->assoc);
+		dd($data);
+		foreach ($data as $key => $value) {
+
+			$summoner[$key] = new Objects\Summoner($value);
+			// Remove Spaces and save name with proper capitalization
+			// $summoner->nameInputSanitization($summoner->name);
+			$summoner[$key]->trimmedName = str_replace(' ', '', $summoner[$key]->name);
+		}
+
+		return $summoner;
 	}
 
 	public function getMatchlist(string $region, string $accountId, int $queue = null, int $season = null, int $champion = null, int $beginTime = null, int $endTime = null, int $beginIndex = null, int $endIndex = null): Objects\MatchList
@@ -158,47 +191,63 @@ class LeagueAPI
 	 *  RANKED_FLEX_SR,
 	 *  RANKED_FLEX_TT.
 	 * 
-	 * This function can return null.
+	 * THIS FUNCTION CAN RETURN NULL.
 	 *
 	 *  @param mixed $region
 	 * 	@param Objects\Summoner[][] $summoners
-	 *  @return Objects\LeagueSummoner[] */
+	 *  @return Objects\LeagueSummoner[][] */
 	public function getLeagueSummoner(string $region, array $summoners)
-
 	{
+
 		foreach ($summoners as $key => $summonersGame) {
 			foreach ($summonersGame as $key2 => $summoner) {
-				dd($summonersGame);
-				$targetUrl[$key][$key2] = "https://{$region}.api.riotgames.com/lol/league/v4/entries/by-summoner/{$summoner}";
+				$targetUrls[$key][$key2] = "https://{$region}.api.riotgames.com/lol/league/v4/entries/by-summoner/{$summoner}";
 			}
 
 		}
+		foreach ($targetUrls as $key => $targetUrl) {
+			$data[$key] = multiCurl($targetUrl, $this->assoc);
 
 
-		$data = multiCurl($targetUrl, $this->assoc);
-
-		dd($data);
-
+		}
 		foreach ($data as $key => $value) {
 			foreach ($value as $key2 => $value2) {
-				if ($value2 === false || $value2 === true) {
-					// we convert the true/false to an int
-					$data[$key][$key2] = (int)$value2;
+				foreach ($value2 as $key3 => $value3) {
+                    foreach ($value3 as $key4 => $value4) {
+                        if ($value4 === false || $value4 === true) {
+                            // we convert the true/false to an int
+                            $data[$key][$key2][$key3][$key4] = (int)$value4;
+                        }
+                    }
 				}
-
 			}
 		}
+
+		
+		
+		
+
 		if (isset($data)) {
 			foreach ($data as $key => $value) {
-				// Name the array values after their corresponsing league to find the easier
-				$obj[$value["queueType"]] = new Objects\LeagueSummoner($value);
-			}
-			if (isset($obj)) {
-				return $obj;
-			} else {
-				return $obj = null;
+				foreach ($value as $key2 => $value2) {
+					if (empty($value2)) {
+						$obj[$key][$key2] = null;
+					}
+					else{
+						foreach ($value2 as $key3 => $value3) {
+							// Name the array values after their corresponsing league to find the easier
+							$obj[$key][$key2][$value3["queueType"]] = new Objects\LeagueSummoner($value3);
+						}
+					}
+				}
 			}
 		}
+		if (isset($obj)) {
+			return $obj;
+		} else {
+			return $obj = null;
+		}
+
 	}	
 
 	/** Valid Game Modes

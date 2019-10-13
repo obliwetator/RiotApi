@@ -34,5 +34,7 @@ class LeagueSummoner extends objectInit
     /** @var bool $freshBlood */
     public $freshBlood;
     /** @var bool $hotStreak */
-    public $hotStreak;
+	public $hotStreak;
+	/** @var miniSeries $miniSeries*/
+	public $miniSeries;
 }
