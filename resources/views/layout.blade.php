@@ -9,18 +9,23 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>@yield('title', 'Home')</title>
+	{{-- Boostrap CSS FULL --}}
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
+	{{-- Sprite CSS for champion icons --}}
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/champion120px.css') }}">
+	{{-- Sprite CSS for items --}}
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/itemSprite64.css')}}">
+	{{-- Custom CSS  --}}
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/customcss.css')}}">
-	<script src="https://code.jquery.com/jquery-3.4.1.js"
-		integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
-		
-		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" 
-		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-		
-	<script src="{{ asset('js/js.js')}}"></script>
+	{{-- Dark Mode --}}
 	<link rel="stylesheet" href="{{ asset('css/dark-mode.css') }}">
+	{{-- Jquery --}}
+	<script src="{{ asset('js/jquery-3.4.1.js')}}"></script>
+	{{-- Bootstrap JS FULL --}}
+	<script src="{{ asset('js/bootstrap.js') }}"></script>
+	{{-- Custom js the will be used across all pages --}}
+	<script src="{{ asset('js/js.js')}}"></script>
+
 	@yield('js')
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 </head>

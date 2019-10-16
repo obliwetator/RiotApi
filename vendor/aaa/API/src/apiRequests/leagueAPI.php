@@ -39,13 +39,18 @@ class LeagueAPI
 		$targetUrl = "https://{$region}.api.riotgames.com/lol/summoner/v4/summoners/by-name/{$summonerName}";
 
 		$data = curl($targetUrl, $this->assoc);
+		if (isset($data)) {
+			$summoner = new Objects\Summoner($data);
+			// Remove Spaces and save name with proper capitalization
+			// $summoner->nameInputSanitization($summoner->name);
+			$summoner->trimmedName = str_replace(' ', '', $summoner->name);
+	
+			return $summoner;
+		}
+		else{
+			return null;
+		}
 
-		$summoner = new Objects\Summoner($data);
-		// Remove Spaces and save name with proper capitalization
-		// $summoner->nameInputSanitization($summoner->name);
-		$summoner->trimmedName = str_replace(' ', '', $summoner->name);
-
-		return $summoner;
 	}
 
 	public function getSummonerId(string $region, array $summonerId): Objects\Summoner
@@ -207,8 +212,6 @@ class LeagueAPI
 		}
 		foreach ($targetUrls as $key => $targetUrl) {
 			$data[$key] = multiCurl($targetUrl, $this->assoc);
-
-
 		}
 		foreach ($data as $key => $value) {
 			foreach ($value as $key2 => $value2) {
@@ -222,11 +225,6 @@ class LeagueAPI
 				}
 			}
 		}
-
-		
-		
-		
-
 		if (isset($data)) {
 			foreach ($data as $key => $value) {
 				foreach ($value as $key2 => $value2) {
@@ -249,6 +247,43 @@ class LeagueAPI
 		}
 
 	}	
+
+	/** Valid Game Modes
+	 *  RANKED_SOLO_5x5,
+	 *  RANKED_TFT,
+	 *  RANKED_FLEX_SR,
+	 *  RANKED_FLEX_TT.
+	 * 
+	 * 	THIS FUNCTION CAN RETURN NULL.
+	 *
+	 *  @param mixed $region
+	 * 	@param Objects\Summoner[][] $summoners
+	 *  @return Objects\LeagueSummoner[][] */
+	public function getLeagueSummonerSingle(string $region,string $summoner)
+	{
+		$targetUrl = "https://{$region}.api.riotgames.com/lol/league/v4/entries/by-summoner/{$summoner}";
+
+		$data = curl($targetUrl, $this->assoc);
+
+		if (empty($data)) {
+			// Returns [] (empty array)
+			return $data;
+		}
+		else{
+			foreach ($data as $key => $value) {
+				foreach ($value as $key2 => $value2) {
+					if ($value2 === false || $value2 === true) {
+						// we convert the true/false to an int
+						$data[$key][$key2] = (int)$value2;
+					}
+				}
+				$entry[$value["queueType"]] = new Objects\LeagueSummoner($data[$key]);
+			}
+			return $entry;
+		}
+
+	}
+	
 
 	/** Valid Game Modes
 	 *  RANKED_SOLO_5x5,

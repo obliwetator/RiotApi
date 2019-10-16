@@ -64,7 +64,7 @@ function curl($targetUrl, $assoc = false, $additionalParameters = null)
 
 	// TODO: Put checks in place if RIOT's API is slow/working
 	if ($response === false) {
-		eh("something went wrong with curl request");
+		// eh("something went wrong with curl request");
 	}
 
 	//close cURL
@@ -83,27 +83,27 @@ function curl($targetUrl, $assoc = false, $additionalParameters = null)
 		switch ($aHeaders["response_code"]) {
 				// Bad request
 			case 400:
-				eh("error " . $aHeaders["response_code"] . " Code");
+				// eh("error " . $aHeaders["response_code"] . " Code");
 				break;
 				// Unauthorized
 			case 401:
-				eh("error " . $aHeaders["response_code"] . " Code");
+				// eh("error " . $aHeaders["response_code"] . " Code");
 				break;
 				// Forbidden (no API key/ wrong API key)
 			case 403:
-				eh("error " . $aHeaders["response_code"] . " Code");
+				// eh("error " . $aHeaders["response_code"] . " Code");
 				break;
 				// Data not found
 			case 404:
-				eh("error " . $aHeaders["response_code"] . " Code");
+				// eh("error " . $aHeaders["response_code"] . " Code");
 				break;
 				// Method not allowed
 			case 405:
-				eh("error " . $aHeaders["response_code"] . " Code");
+				// eh("error " . $aHeaders["response_code"] . " Code");
 				break;
 				// Unsupported media type
 			case 415:
-				eh("error " . $aHeaders["response_code"] . " Code");
+				// eh("error " . $aHeaders["response_code"] . " Code");
 				break;
 				// Limit reached
 			case 429:
@@ -113,19 +113,19 @@ function curl($targetUrl, $assoc = false, $additionalParameters = null)
 				// Errors from RIOT servers
 				// Internal server error
 			case 500:
-				eh("error " . $aHeaders["response_code"] . " Code");
+				// eh("error " . $aHeaders["response_code"] . " Code");
 				break;
 				//Bad gateway
 			case 502:
-				eh("error " . $aHeaders["response_code"] . " Code");
+				// eh("error " . $aHeaders["response_code"] . " Code");
 				break;
 				// Service unavailable
 			case 503:
-				eh("error " . $aHeaders["response_code"] . " Code");
+				// eh("error " . $aHeaders["response_code"] . " Code");
 				break;
 				// Gateway timeout
 			case 504:
-				eh("error " . $aHeaders["response_code"] . " Code");
+				// eh("error " . $aHeaders["response_code"] . " Code");
 				break;
 			default:
 				throw new Exception("Unknown error " . $aHeaders["response_code"] . " Code");
@@ -204,7 +204,7 @@ function multiCurl (array $targetUrls, $assoc = false, array $additionalParamete
 
 		// TODO: Put checks in place if RIOT's API is slow/working
 		if ($result[$k] === false) {
-			eh("something went wrong with curl request");
+			// eh("something went wrong with curl request");
 		}
 
 		$data[$k] = json_decode($sBody[$k], $assoc);
@@ -229,27 +229,27 @@ function handleResponseCodes(array $aHeaders)
 		switch ($aHeaders["response_code"]) {
 				// Bad request
 			case 400:
-				eh("error " . $aHeaders["response_code"] . " Code");
+				// eh("error " . $aHeaders["response_code"] . " Code");
 				break;
 				// Unauthorized
 			case 401:
-				eh("error " . $aHeaders["response_code"] . " Code");
+				// eh("error " . $aHeaders["response_code"] . " Code");
 				break;
 				// Forbidden (no API key/ wrong API key)
 			case 403:
-				eh("error " . $aHeaders["response_code"] . " Code");
+				// eh("error " . $aHeaders["response_code"] . " Code");
 				break;
 				// Data not found
 			case 404:
-				eh("error " . $aHeaders["response_code"] . " Code");
+				// eh("error " . $aHeaders["response_code"] . " Code");
 				break;
 				// Method not allowed
 			case 405:
-				eh("error " . $aHeaders["response_code"] . " Code");
+				// eh("error " . $aHeaders["response_code"] . " Code");
 				break;
 				// Unsupported media type
 			case 415:
-				eh("error " . $aHeaders["response_code"] . " Code");
+				// eh("error " . $aHeaders["response_code"] . " Code");
 				break;
 				// Limit reached
 			case 429:
@@ -259,19 +259,19 @@ function handleResponseCodes(array $aHeaders)
 				// Errors from RIOT servers
 				// Internal server error
 			case 500:
-				eh("error " . $aHeaders["response_code"] . " Code");
+				// eh("error " . $aHeaders["response_code"] . " Code");
 				break;
 				//Bad gateway
 			case 502:
-				eh("error " . $aHeaders["response_code"] . " Code");
+				// eh("error " . $aHeaders["response_code"] . " Code");
 				break;
 				// Service unavailable
 			case 503:
-				eh("error " . $aHeaders["response_code"] . " Code");
+				// eh("error " . $aHeaders["response_code"] . " Code");
 				break;
 				// Gateway timeout
 			case 504:
-				eh("error " . $aHeaders["response_code"] . " Code");
+				// eh("error " . $aHeaders["response_code"] . " Code");
 				break;
 			default:
 				throw new Exception("Unknown error " . $aHeaders["response_code"] . " Code");

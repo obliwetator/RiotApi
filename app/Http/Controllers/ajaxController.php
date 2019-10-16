@@ -54,6 +54,20 @@ class ajaxController extends Controller
 		// --------------------------------------------- // 
 
 		$summonerLeague = $db->getLeagueSummoner($region, $summonerNameIdObj);
+		/** Returning the pure html seems to take less space the the json encoded version. Further researchw required? 
+		 * Upon removing spaces and tabs from the blade template the size dropped to the equivalent of the original html view
+		 * Maybe json encodes each space individually?
+		*/
+		// $serialized = view('individualGameAjax')->with(['matchById' => $matchById])
+		// ->with(['summonerSpells' => $summonerSpells])
+		// ->with(['champions' => $staticChampions])
+		// ->with(['items' => $staticItems])
+		// ->with(['runes' => $staticRunes])
+		// ->with(['summonerLeague' => $summonerLeague])
+		// ->with(['sumonerNameObj' => $summonerNameObj])
+		// ->render();
+
+		// return response()->json(array('success' => true, 'html' => $serialized));
 
 		return view('individualGameAjax')
 		->with(['matchById' => $matchById])

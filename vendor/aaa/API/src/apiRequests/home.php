@@ -39,7 +39,7 @@ for ($i; $i < sizeof($match); $i++) {
 		$profileIconId[$key] = $match[$i]->participantIdentities[$key]->player->profileIcon;
 	}
 }
-
+$match[]->
 
 ?>
 
