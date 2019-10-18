@@ -112,7 +112,7 @@ class LeagueAPI
 		return $summoner;
 	}
 
-	public function getMatchlist(string $region, string $accountId, int $queue = null, int $season = null, int $champion = null, int $beginTime = null, int $endTime = null, int $beginIndex = null, int $endIndex = null): Objects\MatchList
+	public function getMatchlist(string $region, string $accountId, int $queue = null, int $season = null, int $champion = null, int $beginTime = null, int $endTime = null, int $beginIndex = null, int $endIndex = null)
 	{
 		$targetUrl = "https://{$region}.api.riotgames.com/lol/match/v4/matchlists/by-account/{$accountId}";
 
@@ -125,8 +125,13 @@ class LeagueAPI
 		$additionalParameters['endIndex'] = $endIndex;
 
 		$data = curl($targetUrl, $this->assoc, $additionalParameters);
+		if (isset($data)) {
+			return new Objects\MatchList($data);
+		}
+		else{
+			return null;
+		}
 
-		return new Objects\MatchList($data);
 	}
 	/** @var Objects\MatchById[] $matchById
 	 * 	@return Objects\MatchById[]

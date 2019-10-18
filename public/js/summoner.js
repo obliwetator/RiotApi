@@ -18,18 +18,38 @@ $(document).ready(function() {
     });
 });
 
-$('[data-toggle="tab"]').click(function(e) {
-    var $this = $(this),
-        loadurl = $this.attr("href"),
-        targ = $this.attr("data-target");
+var url_string = window.location.href;
+var url = new URL(url_string);
+var get = url.searchParams.get("name");
 
-    $.get(loadurl, function(data) {
-        $(targ).html(data);
-    });
 
-    $this.tab("show");
-    return false;
-});
+
+
+$('#LiveGame-tab').on('click', function (e) {
+	if ($('#LiveGame').text().length > 0) {
+
+	}
+	else{
+		// Hack add a space 
+		$('#LiveGame').append(" ");
+		$.ajax({
+			type: "GET",
+			url: "summoner/champions/ajax/liveGame?name="+get,
+			error: function(jqxhr, status, exception) {
+				console.log("an error occured", exception);
+			},
+			success: function(data) {
+				$("#LiveGame").append(data);
+			},
+			statusCode: {
+				404: function() {
+					console.log("not found");
+				}
+			}
+		});
+	}
+})
+
 
 $(document).on("click", '.test', function(e){
 	e.preventDefault();
@@ -54,10 +74,6 @@ $(document).on("click", '.test', function(e){
 	targetClass.addClass('active');
 	console.log(targetClass);
 });
-$('.test').on('click', function (e) {
-
-
-  });
 
 $( document ).ready(function() {
     $('.Stats.Button').on('click', function (e) {

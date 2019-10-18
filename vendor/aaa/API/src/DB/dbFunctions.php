@@ -3,9 +3,9 @@
 namespace API\dbCall;
 
 use API\LeagueAPI\LeagueAPI;
-
 use API\LeagueAPI\Objects;
 
+require_once("dbConnect.php");
 class dbCall
 {
 	/** @var \mysqli $conn */
@@ -14,14 +14,7 @@ class dbCall
 
 	private function openCon(string $dbRegion)
 	{
-		$db_server = "localhost";
-		$db_user = "root";
-		$db_pass = "";
-		$db_database = "lol_database_" . $dbRegion;
-
-		$conn = new \mysqli($db_server, $db_user, $db_pass, $db_database) or die("Connect failed: %s\n" . $conn->error);
-
-		$this->conn = $conn;
+		$this->conn = DbOpenConn($dbRegion);
 	}
 	private function closeCon($conn)
 	{
@@ -263,8 +256,9 @@ class dbCall
 		{
 			$lol = $this->makeApiRequest();
 			$dbMatchlist = $lol->getMatchlist($region, $accountId, $queue, $season, $champion, $beginTime, $endTime, $beginIndex, $limit);
-
-			$this->setMatchlist($region, $dbMatchlist, $accountId);
+			if (isset($dbMatchlist)) {
+				$this->setMatchlist($region, $dbMatchlist, $accountId);
+			}
 			return $dbMatchlist;
 		}
 		else {
@@ -272,9 +266,9 @@ class dbCall
 			if (sizeof($resultAssoc) < $limit) {
 				$lol = $this->makeApiRequest();
 				$dbMatchlist = $lol->getMatchlist($region, $accountId, $queue, $season, $champion, $beginTime, $endTime, $beginIndex, $limit);
-
-
-				$this->setMatchlist($region, $dbMatchlist, $accountId);
+				if (isset($dbMatchlist)) {
+					$this->setMatchlist($region, $dbMatchlist, $accountId);
+				}
 			}
 			else{
 				$result["matches"] = $resultAssoc;
@@ -531,7 +525,6 @@ class dbCall
 	{
 		// Find unique summoners
 		// If the $match array has more than 1 element we will compare those arrays for unique summoners
-		clock()->startEvent("ifMassacre", "ifMassacre");
 		$mirror = $match;
 
 		if (sizeof($match) > 1){
@@ -553,9 +546,6 @@ class dbCall
 			}
 			$match = $mirror;
 		}
-
-		clock()->endEvent("ifMassacre");
-
 		$selectQuery = "";
         foreach ($match as $key => $summoners) {
 			foreach ($summoners as $key2 => $summoner) {
