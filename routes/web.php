@@ -20,8 +20,10 @@ Route::post('/summoner', 'ajaxController@summoner');
 Route::post('/summoner/individualGameAjax', 'ajaxController@individualGameAjax');
 	
 	
-
+// also ajax change later
 Route::get('/summoner/champions', 'PagesController@summonerChampions');
+Route::get('/summoner/champions/ajax/seasonRank', 'ajaxController@seasonRank');
+Route::get('/summoner/champions/ajax/liveGame', 'ajaxController@summonerLiveGame');
 
 Route::get('/champions','PagesController@champions');
 // Dynamic path for each champion

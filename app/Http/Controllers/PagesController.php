@@ -38,63 +38,84 @@ class PagesController extends Controller
 		$version = '9.17.1';
 		$limit = 2;
 
-		clock()->startEvent("GetDbSummonerMatchlist", "Load summoner/matchlist from db");
+		clock()->startEvent("GetDbSummoner", "Load Summoner from db");
 		$summoner = $db->getSummoner($region, $summonerName);
-
+		clock()->endEvent("GetDbSummoner");
 		if (isset($summoner)) {
 			
 		}
 		else{
 			return abort(404);
 		}
-
-		// The summoner might exist but have no data on any matches. Return 404 in this case
+		clock()->startEvent("GetDbMatchlist", "Load Matchlist from db");
+		// TODO: Store NULL matchlist in DB so that we wont reuqry the api every time (low priority)
 		$matchlist = $db->getMatchlist($region, $summoner->accountId, $limit);
-		clock()->endEvent("GetDbSummonerMatchlist");
+		clock()->endEvent("GetDbMatchlist");
+		
+
+
 		
 		clock()->startEvent("getStaticData", "Load all the static data");
 
 		// Load all static data for that specific page?
+		clock()->startEvent("getStaticProfileIcons", "getStaticProfileIcons");
 		$icons = $lol->getStaticProfileIcons($locale, $version);
+		clock()->endEvent("getStaticProfileIcons");
+
+		clock()->startEvent("getStaticSummonerSpells", "getStaticSummonerSpells");
 		$summonerSpells = $lol->getStaticSummonerSpells($locale, $version);
+		clock()->endEvent("getStaticSummonerSpells");
+
+		clock()->startEvent("getStaticChampions", "getStaticChampions");
 		$staticChampions  =  $lol->getStaticChampions(true, $locale, $version);
+		clock()->endEvent("getStaticChampions");
+
+		clock()->startEvent("getStaticItems", "getStaticItems");
 		$staticItems =  $lol->getStaticItems($locale, $version);
+		clock()->endEvent("getStaticItems");
+
+		clock()->startEvent("getStaticRunesReforged", "getStaticRunesReforged");
 		$staticRunes = $lol->getStaticRunesReforged($locale, $version);
+		clock()->endEvent("getStaticRunesReforged");
+
 
 		clock()->endEvent("getStaticData");
 
 
-
-
 		clock()->startEvent("getMatchbyId", "Load Match by id from Db");
-		// If we have a DB matchlist we try to get DB matchById
 		if (isset($matchlist)) {
 			$matchById = $db->getMatchById($region, $matchlist);
 		}
-		else {
-			// We don't have the DB matchlist. Get it from API
-			$matchlist = $lol->getMatchlist($region, $summoner->accountId, null, null, null, null, null, null, $limit);
-			$db->setMatchlist($region,$matchlist,$summoner->accountId);
-
-			$matchById = $db->getMatchById($region, $matchlist);
+		else{
+			$matchById = null;
 		}
 		clock()->endEvent("getMatchbyId");
 
 		clock()->startEvent("getLeagueSummoner", "Load LeagueSummoner");
 		// find all the summonners from the games
-		foreach ($matchById as $key => $value) {
-			foreach ($value->participantIdentities as $key2 => $value2) {
-				$summonerNameName[$key2] = $value2->player->summonerName;
+		if (isset($matchById)) {
+			foreach ($matchById as $key => $value) {
+				foreach ($value->participantIdentities as $key2 => $value2) {
+					$summonerNameName[$key2] = $value2->player->summonerName;
+				}
+				$summonerNameObj[$key] = $summonerNameName;
 			}
-			$summonerNameObj[$key] = $summonerNameName;
 		}
-		// --------------------------------------------- // 
-		$summonerLeagueTarget = $db->getLeagueSummonerSingle($region, $summoner->id);
+		else{
+			$summonerNameObj = null;
+		}
+		if (isset($matchlist)) {
+			$summonerLeagueTarget = $db->getLeagueSummonerSingle($region, $summoner->id);
+		}else{
+			$summonerLeagueTarget = null;
+		}
+
 
 		clock()->endEvent("getLeagueSummoner");
 
 		clock()->endEvent("SummonerController");
 
+		clock()->startEvent("View", "Create/send view");
 		return view('summoner')
 		->with(['summoner' => $summoner])
 		->with(['icons' => $icons])
@@ -118,9 +139,15 @@ class PagesController extends Controller
 
 	public function champions()
 	{
-		clock()->startEvent("champions", "champions list page");
+		clock()->startEvent("champions", "champions list controller");
+
+		clock()->startEvent("getContents", "Get Contents");
 		$file = file_get_contents('lolContent/data/en_GB/championFull.json');
+		clock()->endEvent("getContents");
+
+		clock()->startEvent("decode", "Decode");
 		$file = json_decode($file, true);
+		clock()->endEvent("decode");
 
 		clock()->endEvent("champions");
 
@@ -141,6 +168,7 @@ class PagesController extends Controller
 	// The returned view will be dynamically created depending on the champion name selected
 	public function championsStat($name)
 	{
+		// We will return this view on first request with the default the latest season
 		return view('championStats')->with(['name' => $name]);
 	}
 }
