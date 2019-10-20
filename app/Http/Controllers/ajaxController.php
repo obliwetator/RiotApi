@@ -147,7 +147,6 @@ class ajaxController extends Controller
 		clock()->endEvent("getStaticItems");
 
 
-
 		foreach ($activeGame->participants as $key => $value) {
 			$summonerNameIdObj[0][$key] = $value->summonerId;
 		}
