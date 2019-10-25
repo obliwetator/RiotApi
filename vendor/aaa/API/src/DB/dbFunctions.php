@@ -16,9 +16,9 @@ class dbCall
 	{
 		$this->conn = DbOpenConn($dbRegion);
 	}
-	private function closeCon($conn)
+	private function closeCon()
 	{
-		$conn->close();
+		$this->conn->close();
 	}
 
 	private function makeDbCallGet(string $region, string $query)
@@ -686,5 +686,55 @@ class dbCall
 	{
 		$lol = new LeagueAPI();
 		return $lol;
+	}
+
+	public function setRequests(string $region, $request)
+	{
+		if (isset($request["retry-after"])) {
+			$retry = $request["retry-after"];
+		}
+		else{
+			$retry = null;
+		}
+		$timestamp = strtotime($request["date"]);
+
+		$sql = "INSERT INTO `requests_eun1` (`app-rate-limit`, `app-rate-limit-count`, `method-rate-limit`, `method-rate-limit-count`, `targetUrl`, `response_code`, `date`, `retry-after`)VALUES ('{$request["x-app-rate-limit"]}', '{$request["x-app-rate-limit-count"]}', '{$request["x-method-rate-limit"]}', '{$request["x-method-rate-limit-count"]}', '{$request["targetUrl"]}', '{$request["response_code"]}', '{$timestamp}', '{$retry}')";
+		$this->makeDbCallSet($region, $sql);
+	}
+
+	public function setRequestsMulti(string $region, $request)
+	{
+		$request = array_values($request);
+
+		foreach ($request as $key => $value) {
+			if (isset($request[$key]["retry-after"])) {
+				$retry = $request[$key]["retry-after"];
+			}
+			else{
+				$retry[$key] = null;
+			}
+			$timestamp[$key] = strtotime($request[$key]["date"]);
+		}
+		$sql = "INSERT INTO `requests_eun1` (`app-rate-limit`, `app-rate-limit-count`, `method-rate-limit`, `method-rate-limit-count`, `targetUrl`, `response_code`, `date`, `retry-after`) VALUES ";
+		foreach ($request as $key => $value) {
+			if (sizeof($request) == $key + 1) {
+
+				$sql .= "('{$request[$key]["x-app-rate-limit"]}', '{$request[$key]["x-app-rate-limit-count"]}', '{$request[$key]["x-method-rate-limit"]}', '{$request[$key]["x-method-rate-limit-count"]}', '{$request[$key]["targetUrl"]}', '{$request[$key]["response_code"]}', '{$timestamp[$key]}', '{$retry[$key]}');";
+			}
+			else
+			{
+				$sql .= "('{$request[$key]["x-app-rate-limit"]}', '{$request[$key]["x-app-rate-limit-count"]}', '{$request[$key]["x-method-rate-limit"]}', '{$request[$key]["x-method-rate-limit-count"]}', '{$request[$key]["targetUrl"]}', '{$request[$key]["response_code"]}', '{$timestamp[$key]}', '{$retry[$key]}'),";
+			}
+		}
+		$this->makeDbCallSet($region, $sql);
+	}
+
+	public function getRequests(string $region)
+	{
+		$this->openCon($region);
+		$this->conn->prepare("");
+
+
+		$this->closeCon($this->conn);
 	}
 }

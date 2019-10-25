@@ -22,7 +22,7 @@ class LeagueAPI
 			$targetUrls[$key] = "https://{$region}.api.riotgames.com/lol/summoner/v4/summoners/by-account/{$summonerN}";
 		}
 
-		$data = multiCurl($targetUrls, $this->assoc);
+		$data = multiCurl($region, $targetUrls, $this->assoc);
 		foreach ($data as $key => $value) {
 
 			$summoner[$key] = new Objects\Summoner($value);
@@ -38,7 +38,7 @@ class LeagueAPI
 	{
 		$targetUrl = "https://{$region}.api.riotgames.com/lol/summoner/v4/summoners/by-name/{$summonerName}";
 
-		$data = curl($targetUrl, $this->assoc);
+		$data = curl($region,$targetUrl, $this->assoc);
 		if (isset($data)) {
 			$summoner = new Objects\Summoner($data);
 			// Remove Spaces and save name with proper capitalization
@@ -60,8 +60,7 @@ class LeagueAPI
 			$targetUrls[$key] = "https://{$region}.api.riotgames.com/lol/summoner/v4/summoners/by-name/{$summonerN}";
 		}
 
-		$data = multiCurl($targetUrls, $this->assoc);
-		dd($data);
+		$data = multiCurl($region, $targetUrls, $this->assoc);
 		foreach ($data as $key => $value) {
 
 			$summoner[$key] = new Objects\Summoner($value);
@@ -80,7 +79,7 @@ class LeagueAPI
 			$targetUrls[$key] = "https://{$region}.api.riotgames.com/lol/summoner/v4/summoners/{$summonerN}";
 		}
 
-		$data = multiCurl($targetUrls, $this->assoc);
+		$data = multiCurl($region, $targetUrls, $this->assoc);
 		foreach ($data as $key => $value) {
 
 			$summoner[$key] = new Objects\Summoner($value);
@@ -99,8 +98,7 @@ class LeagueAPI
 			$targetUrls[$key] = "https://{$region}.api.riotgames.com/lol/summoner/v4/summoners/by-account/{$summonerN}";
 		}
 
-		$data = multiCurl($targetUrls, $this->assoc);
-		dd($data);
+		$data = multiCurl($region, $targetUrls, $this->assoc);
 		foreach ($data as $key => $value) {
 
 			$summoner[$key] = new Objects\Summoner($value);
@@ -115,6 +113,7 @@ class LeagueAPI
 	public function getMatchlist(string $region, string $accountId, int $queue = null, int $season = null, int $champion = null, int $beginTime = null, int $endTime = null, int $beginIndex = null, int $endIndex = null)
 	{
 		$targetUrl = "https://{$region}.api.riotgames.com/lol/match/v4/matchlists/by-account/{$accountId}";
+		
 
 		$additionalParameters['queue'] = $queue;
 		$additionalParameters['season'] = $season;
@@ -124,7 +123,7 @@ class LeagueAPI
 		$additionalParameters['beginIndex'] = $beginIndex;
 		$additionalParameters['endIndex'] = $endIndex;
 
-		$data = curl($targetUrl, $this->assoc, $additionalParameters);
+		$data = curl($region, $targetUrl, $this->assoc, $additionalParameters);
 		if (isset($data)) {
 			return new Objects\MatchList($data);
 		}
@@ -142,7 +141,7 @@ class LeagueAPI
             $targetUrl[$key] = "https://{$region}.api.riotgames.com/lol/match/v4/matches/{$matchId}";
 		}
 
-		$data = multiCurl($targetUrl, $this->assoc);
+		$data = multiCurl($region, $targetUrl, $this->assoc);
 
 		foreach ($data as $key => $value) {
 			$matchById[$key] = new Objects\MatchById($value);
@@ -154,17 +153,17 @@ class LeagueAPI
 	{
 		$targetUrl = "https://{$region}.api.riotgames.com/lol/match/v4/timelines/by-match/{$matchId}";
 
-		$data = curl($targetUrl, $this->assoc);
+		$data = curl($region,$targetUrl, $this->assoc);
 
 		return new Objects\matchTimeline($data);
 	}
-
+	/** Can return NULL */
 	public function getActiveMatchInfo(string $region, string $summonerId)
 	{
 		//throw new Exception("Not implemented");
 		$targetUrl = "https://{$region}.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/{$summonerId}";
 
-		$data = curl($targetUrl, $this->assoc);
+		$data = curl($region,$targetUrl, $this->assoc);
 
 		if (isset($data)) {
 			return new Objects\activeGame($data);
@@ -172,16 +171,13 @@ class LeagueAPI
 		else{
             return null;
         }
-
-
-
 	}
 
 	public function getChampionMasteriesSummoner(string $region, string $summonerId): Objects\championMasteriesFrame
 	{
 		$targetUrl = "https://{$region}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/{$summonerId}";
 
-		$data = curl($targetUrl, $this->assoc);
+		$data = curl($region,$targetUrl, $this->assoc);
 
 		return new Objects\championMasteriesFrame($data);
 	}
@@ -190,7 +186,7 @@ class LeagueAPI
 	{
 		$targetUrl = "https://{$region}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/{$summonerId}/by-champion/{$championId}";
 
-		$data = curl($targetUrl, $this->assoc);
+		$data = curl($region,$targetUrl, $this->assoc);
 
 		return new Objects\championMasteriesByChampion($data);
 	}
@@ -200,7 +196,7 @@ class LeagueAPI
 	{
 		$targetUrl = "https://{$region}.api.riotgames.com/lol/champion-mastery/v4/scores/by-summoner/{$summonerId}";
 
-		return curl($targetUrl, $this->assoc);
+		return curl($region, $targetUrl, $this->assoc);
 	}
 
 	/** Valid Game Modes
@@ -224,7 +220,7 @@ class LeagueAPI
 
 		}
 		foreach ($targetUrls as $key => $targetUrl) {
-			$data[$key] = multiCurl($targetUrl, $this->assoc);
+			$data[$key] = multiCurl($region, $targetUrl, $this->assoc);
 		}
 		foreach ($data as $key => $value) {
 			foreach ($value as $key2 => $value2) {
@@ -276,7 +272,7 @@ class LeagueAPI
 	{
 		$targetUrl = "https://{$region}.api.riotgames.com/lol/league/v4/entries/by-summoner/{$summoner}";
 
-		$data = curl($targetUrl, $this->assoc);
+		$data = curl($region,$targetUrl, $this->assoc);
 
 		if (empty($data)) {
 			// Returns [] (empty array)
@@ -310,7 +306,7 @@ class LeagueAPI
 	{
 		$targetUrl = "https://{$region}.api.riotgames.com/lol/league/v4/challengerleagues/by-queue/{$gameMode}";
 
-		$data = curl($targetUrl, $this->assoc);
+		$data = curl($region,$targetUrl, $this->assoc);
 
 		return new Objects\ChallengerLeagues($data);
 	}
@@ -327,7 +323,7 @@ class LeagueAPI
 	{
 		$targetUrl = "https://{$region}.api.riotgames.com/lol/league/v4/grandmasterleagues/by-queue/{$gameMode}";
 
-		$data = curl($targetUrl, $this->assoc);
+		$data = curl($region,$targetUrl, $this->assoc);
 
 		return new Objects\ChallengerLeagues($data);
 	}
@@ -344,7 +340,7 @@ class LeagueAPI
 	{
 		$targetUrl = "https://{$region}.api.riotgames.com/lol/league/v4/masterleagues/by-queue/{$gameMode}";
 
-		$data = curl($targetUrl, $this->assoc);
+		$data = curl($region,$targetUrl, $this->assoc);
 
 		return new Objects\ChallengerLeagues($data);
 	}
@@ -364,7 +360,7 @@ class LeagueAPI
 		$targetUrl = "https://{$region}.api.riotgames.com/lol/league/v4/entries/{$gameMode}/{$division}/{$tier}";
 
 		$additionalParameters['page'] = $page;
-		$data = curl($targetUrl, $this->assoc, $additionalParameters);
+		$data = curl($region, $targetUrl, $this->assoc, $additionalParameters);
 
 		if (isset($data)) {
 			foreach ($data as $key => $value) {
@@ -382,7 +378,7 @@ class LeagueAPI
 	{
 		$targetUrl = "https://{$region}.api.riotgames.com/lol/league/v4/leagues/{$leagueId}";
 
-		$data = curl($targetUrl, $this->assoc);
+		$data = curl($region,$targetUrl, $this->assoc);
 
 		return new Objects\ChallengerLeagues($data);
 	}

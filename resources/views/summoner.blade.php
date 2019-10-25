@@ -4,7 +4,10 @@
 
 @section('js')
 
-<script src="js/Chart.js"></script>
+<script src="{{ asset('js/chart.js')}}"></script>
+<script src="{{ asset('js/spectate.js')}}"></script>
+<script src="{{ asset('js/summoner.js')}}"></script>
+<script src="{{asset('/js/tipped.js')}}"></script>
 @endsection
 
 @section('content')
@@ -23,7 +26,6 @@
  * @var API\LeagueAPI\Objects\StaticData\StaticSummonerSpellList $summonerSpells
  * @var API\LeagueAPI\Objects\StaticData\
  */ ?>
-
 <div class="Summoner">
     <div  class="position-relative">
 		<div  class="d-inline-block">
@@ -372,5 +374,4 @@
 		<div class = "tab-pane" id="LiveGame"  aria-labelledby = "LiveGame-tab" role="tabpanel"></div>
 	</div>
 </div>
-<script src="{{ asset('js/summoner.js')}}"></script>
 @endsection

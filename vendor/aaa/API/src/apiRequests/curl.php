@@ -1,16 +1,18 @@
 <?php
 
+use API\dbCall\dbCall;
 use PHPUnit\Runner\Exception;
 
 define('APIKEY', env('API_KEY'));
 
 // This determines whether cUrl will output detailed logs to the console. Disable when not debugging
-const enableCurlLogging = true;
+const enableCurlLogging = false;
 
 
 // SIngle query
-function curl($targetUrl, $assoc = false, $additionalParameters = null)
+function curl(string $region, $targetUrl, $assoc = false, $additionalParameters = null)
 {
+	$db = new dbCall;
 	$curl = curl_init();
 
 	// Depending if we have additional parameters to pass we choose the right call constructor
@@ -61,6 +63,13 @@ function curl($targetUrl, $assoc = false, $additionalParameters = null)
 	// Add the url for easier debugging
 	// TODO: Remove?
 	$aHeaders["targetUrl"] = $targetUrl;
+
+
+
+	// Change to async? Not necessary to display the page
+	$db->setRequests($region, $aHeaders);
+
+
 
 	// TODO: Put checks in place if RIOT's API is slow/working
 	if ($response === false) {
@@ -135,8 +144,10 @@ function curl($targetUrl, $assoc = false, $additionalParameters = null)
 }
 
 // Executes queries in parallel. Used for getting games by id
-function multiCurl (array $targetUrls, $assoc = false, array $additionalParameters = null)
+function multiCurl (string $region, array $targetUrls, $assoc = false, array $additionalParameters = null)
 {
+	$db = new dbCall();
+
 
 	// array of curl handles
 	$multiCurl = array();
@@ -144,6 +155,7 @@ function multiCurl (array $targetUrls, $assoc = false, array $additionalParamete
 	$result = array();
 	// multi handle
 	$mh = curl_multi_init();
+
 	foreach ($targetUrls as $i => $targetUrl) {
 
 		// Depending if we have additional parameters to pass we choose the right call constructor
@@ -174,7 +186,6 @@ function multiCurl (array $targetUrls, $assoc = false, array $additionalParamete
 		]);
 		curl_multi_add_handle($mh, $multiCurl[$i]);
 	}
-	
 	$index = null;
 	do {
 		curl_multi_exec($mh, $index);
@@ -195,12 +206,14 @@ function multiCurl (array $targetUrls, $assoc = false, array $additionalParamete
 			$aHeaders[$k][strtolower($key)] = trim($val);
 		}
 
+
 		// add response code since it wasn't added by the above code.
 		// Since the response code is not nicely formated from RIOT we will just add it from $info since we need it anyway
 		$aHeaders[$k]["response_code"] = $info[$k]["http_code"];
+
 		// Add the url for easier debugging
-		// TODO: Remove?
 		$aHeaders[$k]["targetUrl"] = $targetUrl;
+
 
 		// TODO: Put checks in place if RIOT's API is slow/working
 		if ($result[$k] === false) {
@@ -213,6 +226,10 @@ function multiCurl (array $targetUrls, $assoc = false, array $additionalParamete
 
 		curl_multi_remove_handle($mh, $ch);
 	}
+
+	// Change to async? Not necessary to display the page
+	$db->setRequestsMulti($region, $aHeaders);
+
 	// close
 	curl_multi_close($mh);
 	return $data;

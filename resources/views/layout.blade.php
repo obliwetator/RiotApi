@@ -8,9 +8,14 @@
 	<meta name="keywords" content="League of Legends, Summoner">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<title>@yield('title', 'Home')</title>
-	{{-- Boostrap CSS FULL --}}
+	{{-- Complied with laravel mix. compiles bootstrap css --}}
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
+
+	{{-- Self made dependencies --}}
+
+	{{-- CSS --}}
 	{{-- Sprite CSS for champion icons --}}
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/champion120px.css') }}">
 	{{-- Sprite CSS for items --}}
@@ -19,21 +24,15 @@
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/customcss.css')}}">
 	{{-- Dark Mode --}}
 	<link rel="stylesheet" href="{{ asset('css/dark-mode.css') }}">
-	{{-- Jquery --}}
-	<script src="{{ asset('js/jquery-3.4.1.js')}}"></script>
-	{{-- Bootstrap JS FULL --}}
-	<script src="{{ asset('js/bootstrap.js') }}"></script>
-	{{-- Custom js the will be used across all pages --}}
-	<script src="{{ asset('js/js.js')}}"></script>
 
-	@yield('js')
-	<meta name="csrf-token" content="{{ csrf_token() }}">
+	<link rel="stylesheet" type="text/css" href="/css/tipped.css"/>
+
 </head>
+
 
 <body>
 	<div class="p-0 bg-light">
 		<ul class="p-0">
-			<li class="d-inline-block"><a href="/test">Test(Remove)</a></li>
 			<li class="d-inline-block"><a href="/">Home</a></li>
 			<li class="d-inline-block"><a href="/champions">Champions</a></li>
 			<li class="d-inline-block"><a href="/stats">Stats</a></li>
@@ -64,6 +63,14 @@
 		<hr>
 		<p>Footer stuff(Edit in layout file)</p>
 	</div>
+	
+	{{-- Complied with laravel mix. Takes all dependencies and combines them all into 1 big js file --}}
+	<script src="{{ asset('js/app.js')}}"></script>
+	{{-- Custom js the will be used across all pages --}}
+	<script src="{{ asset('js/js.js')}}"></script>
+
+	@yield('js')
+	{{-- Here will go custom js from different views --}}
 </body>
 
 </html>

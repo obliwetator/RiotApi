@@ -57,8 +57,23 @@
 											<div class="LevelTable" style="position: absolute">{{ $matchById[0]->participants[$i]->stats->champLevel }}</div>
 										</a>
 									</td>
-									<td class="SummonerSpell">Spell</td>
-									<td class="Rune">Rune</td>
+									<td class="SummonerSpell">
+										<div class="Spell">	
+											<img class="tooltipp" style="height: 20px; width: 20px;" title="{{ $summonerSpells->data[$matchById[0]->participants[$i]->spell1Id]->description }}" src="/lolContent/img2/spell/{{ $summonerSpells->data[$matchById[0]->participants[$i]->spell1Id]->id }}.png" alt="">
+										</div>
+										<div class="Spell" >
+											<img class="tooltipp" style="height: 20px; width: 20px;" title="{{ $summonerSpells->data[$matchById[0]->participants[$i]->spell1Id]->description }}" src="/lolContent/img2/spell/{{ $summonerSpells->data[$matchById[0]->participants[$i]->spell2Id]->id }}.png" alt="">
+										</div>
+									</td>
+									<td class="Rune">
+										<div class="Rune">
+											{{-- Zero index is Keystone --}}
+											<img class="tooltipp" style="width: 20px; height: 20px" title="{{$runes->runes[$matchById[0]->participants[$i]->stats->perk0]->longDesc}}" src="/lolContent/img/{{$runes->runes[$matchById[0]->participants[$i]->stats->perk0]->icon}}" alt="{{$runes->runes[$matchById[0]->participants[$i]->stats->perk0]->icon}}">
+										</div>
+										<div class="Rune">
+											<img class="tooltipp" style="width: 20px; height: 20px" title="{{$runes->runes[$matchById[0]->participants[$i]->stats->perk0]->longDesc}}" src="/lolContent/img/perk-images/Styles/{{$matchById[0]->participants[$i]->stats->perkSubStyle}}.png" alt=""> 
+										</div>
+									</td>
 									<td class="SummonerName">
 										<a href='/summoner?name={{ $sumonerNameObj[0][$i]}}'>{{ $sumonerNameObj[0][$i]}}</a>
 									</td>
@@ -135,6 +150,7 @@
 						</thead>
 						<tbody>
 							{{-- for each loop --}}
+							{{-- It uses the previous index of $i. DO NOT INITIALIZE TO 0 --}}
 							@for ($i; $i < sizeof($matchById[0]->participants); $i++)
 								<tr>
 									<td class="ChampionImage">
@@ -143,16 +159,31 @@
 											<div class="LevelTable" style="position: absolute">{{ $matchById[0]->participants[$i]->stats->champLevel }}</div>
 										</a>
 									</td>
-									<td class="SummonerSpell">Spell</td>
-									<td class="Rune">Rune</td>
+									<td class="SummonerSpell">
+										<div class="Spell">	
+											<img class="tooltipp" style="height: 20px; width: 20px;" title="{{ $summonerSpells->data[$matchById[0]->participants[$i]->spell1Id]->description }}" src="/lolContent/img2/spell/{{ $summonerSpells->data[$matchById[0]->participants[$i]->spell1Id]->id }}.png" alt="">
+										</div>
+										<div class="Spell" >
+											<img class="tooltipp" style="height: 20px; width: 20px;" title="{{ $summonerSpells->data[$matchById[0]->participants[$i]->spell1Id]->description }}" src="/lolContent/img2/spell/{{ $summonerSpells->data[$matchById[0]->participants[$i]->spell2Id]->id }}.png" alt="">
+										</div>
+									</td>
+									<td class="Rune">
+										<div class="Rune">
+											{{-- Zero index is Keystone --}}
+											<img class="tooltipp" style="width: 20px; height: 20px" title="{{$runes->runes[$matchById[0]->participants[$i]->stats->perk0]->longDesc}}" src="/lolContent/img/{{$runes->runes[$matchById[0]->participants[$i]->stats->perk0]->icon}}" alt="{{$runes->runes[$matchById[0]->participants[$i]->stats->perk0]->icon}}">
+										</div>
+										<div class="Rune">
+											<img class="tooltipp" style="width: 20px; height: 20px" title="{{$runes->runes[$matchById[0]->participants[$i]->stats->perk0]->longDesc}}" src="/lolContent/img/perk-images/Styles/{{$matchById[0]->participants[$i]->stats->perkSubStyle}}.png" alt=""> 
+										</div>
+									</td>
 									<td class="SummonerName">
 										<a href='/summoner?name={{ $sumonerNameObj[0][$i] }}'>{{ $sumonerNameObj[0][$i]}}</a>
 									</td>
 									<td class="Tier">
 										@if (isset($summonerLeague[0][$i]["RANKED_SOLO_5x5"]))
-											{{ $summonerLeague[0][$i]["RANKED_SOLO_5x5"]->tier. " " . $summonerLeague[0][$i]["RANKED_SOLO_5x5"]->rank }}
+											<div>{{ $summonerLeague[0][$i]["RANKED_SOLO_5x5"]->tier. " " . $summonerLeague[0][$i]["RANKED_SOLO_5x5"]->rank }}</div>
 										@else
-											Unranked
+											<div>Unranked</div>
 										@endif
 									</td>
 									<td class="KDA">
@@ -200,3 +231,9 @@
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+	  Tipped.create('.tooltipp');
+	});
+  </script>
