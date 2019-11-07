@@ -1,3 +1,29 @@
+4.0.13
+
+- fixed stack traces processing not handling call_user_func frames properly leading to wrong traces (reported by marcus-at-localhost, thanks!)
+- fixed wrong stack traces skip namespaces defaults leading to wrong traces
+- fixed vanilla integration config file missing and no longer used settings
+
+
+4.0.12
+
+- added a simple index file locking to the file storage
+- improved handling of invalid index data in the file storage (reported by nsbucky and tkaven, thanks!)
+- fixed Laravel data source crash when running without auth service (implemented by DrBenton, thanks!)
+
+4.0.11
+
+- updated web UI (Clockwork App 4.0.6)
+
+4.0.10
+
+- fixed wrong file:line for log messages (requires enabled stack traces atm)
+
+4.0.9
+
+- fixed duplicate queries detection reporting all relationship queries instead of only duplicates (reported by robclancy, thanks!)
+- improved the default .gitignore for metadata storage to ignore compressed metadata as well (implemented by clugg, thanks!)
+
 4.0.8
 
 - updated web UI (Clockwork App 4.0.5)

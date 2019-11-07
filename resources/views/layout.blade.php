@@ -27,8 +27,11 @@
 
 	<link rel="stylesheet" type="text/css" href="/css/tipped.css"/>
 
-</head>
+		{{-- Complied with laravel mix. Takes all dependencies and combines them all into 1 big js file --}}
+		<script src="{{ asset('js/app.js')}}"></script>
 
+</head>
+ 
 
 <body>
 	<div class="p-0 bg-light">
@@ -54,7 +57,7 @@
 			</li>
 
 		</ul>
-		<script src="{{ asset('js/dark-mode-switch.min.js') }}"></script>
+		<script src="{{ asset('js/custom/dark-mode-switch.min.js') }}"></script>
 	</div>
 	<div class="main">
 		@yield('content')
@@ -63,11 +66,11 @@
 		<hr>
 		<p>Footer stuff(Edit in layout file)</p>
 	</div>
-	
-	{{-- Complied with laravel mix. Takes all dependencies and combines them all into 1 big js file --}}
-	<script src="{{ asset('js/app.js')}}"></script>
+
+
+
 	{{-- Custom js the will be used across all pages --}}
-	<script src="{{ asset('js/js.js')}}"></script>
+	<script src="{{ asset('js/custom/js.js')}}"></script>
 
 	@yield('js')
 	{{-- Here will go custom js from different views --}}

@@ -152,8 +152,6 @@ class Clockwork
 			);
 		}
 
-		$storage->filter = $this->config['filter'];
-
 		return $storage;
 	}
 
@@ -168,6 +166,8 @@ class Clockwork
 					$this->config['stack_traces']['skip_vendors'],
 					[ 'itsgoingd', 'laravel', 'illuminate' ]
 				))
+				->isNotNamespace($this->config['stack_traces']['skip_namespaces'])
+				->isNotFunction([ 'call_user_func', 'call_user_func_array' ])
 				->isNotClass($this->config['stack_traces']['skip_classes']),
 			'tracesLimit' => $this->config['stack_traces']['limit']
 		]);

@@ -21,7 +21,6 @@ class PagesController extends Controller
 	public function Summoner(Request $name)
 	{
 		clock()->startEvent("SummonerController", "Time spent in summoner controller");
-
 		$summonerName = $name->get("name");
 		// If no username is entered return 404
 		if (!isset($summonerName)) {
@@ -170,5 +169,11 @@ class PagesController extends Controller
 	{
 		// We will return this view on first request with the default the latest season
 		return view('championStats')->with(['name' => $name]);
+	}
+
+	public function admin()
+	{
+
+		return view('admin');
 	}
 }

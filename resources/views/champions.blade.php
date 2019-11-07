@@ -6,7 +6,7 @@
 
 <script>
 
-	$(function(){
+		$( document ).ready(function() {
 		// Filter champions function
 		$('.champion_filter').on('click', '.nav-link', function(){
 			var $filterList = $(this).closest('.champion_filter').find('.nav-link'),
@@ -114,3 +114,4 @@
 	</div>
 	@endforeach
 @endsection
+

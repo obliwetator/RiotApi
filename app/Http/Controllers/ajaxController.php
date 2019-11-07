@@ -216,4 +216,11 @@ class ajaxController extends Controller
 		->with(['runesPaths' => $staticRunesPaths])
 		->with(['key' => $id]);
 	}
+
+	public function adminAjax(Request $name)
+	{
+		
+
+		return view('adminAjax');
+	}
 }

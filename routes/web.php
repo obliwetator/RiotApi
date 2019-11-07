@@ -16,7 +16,7 @@ Route::get('/', 'PagesController@home');
 
 Route::get('/summoner', 'PagesController@summoner');
 
-Route::post('/summoner/individualGameAjax', 'ajaxController@individualGameAjax');
+Route::any('/summoner/individualGameAjax', 'ajaxController@individualGameAjax');
 
 	
 	
@@ -35,3 +35,7 @@ Route::get('/champions/{name}/statistics', 'PagesController@championsStat');
 Route::get('/stats','PagesController@stats');
 
 Route::get('/leaderboards','PagesController@leaderboards');
+
+
+Route::get('/admin', 'PagesController@admin');
+Route::get('/adminAjax', 'ajaxController@adminAjax');

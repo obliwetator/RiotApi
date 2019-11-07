@@ -36918,11 +36918,6 @@ module.exports = function(module) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 /***/ }),
@@ -37003,8 +36998,8 @@ if (token) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! E:\xampp\htdocs\API\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! E:\xampp\htdocs\API\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! G:\laravel\RiotApiWebsite\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! G:\laravel\RiotApiWebsite\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

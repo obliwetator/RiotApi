@@ -5,9 +5,9 @@
 @section('js')
 
 <script src="{{ asset('js/chart.js')}}"></script>
-<script src="{{ asset('js/spectate.js')}}"></script>
-<script src="{{ asset('js/summoner.js')}}"></script>
-<script src="{{asset('/js/tipped.js')}}"></script>
+<script src="{{ asset('js/custom/spectate.js')}}"></script>
+<script src="{{ asset('js/custom/summoner.js')}}"></script>
+<script src="{{ asset('js/custom/tipped.js')}}"></script>
 @endsection
 
 @section('content')
