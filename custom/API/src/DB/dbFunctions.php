@@ -5,7 +5,7 @@ namespace API\dbCall;
 use API\LeagueAPI\LeagueAPI;
 use API\LeagueAPI\Objects;
 
-require_once("dbConnect.php");
+require_once("../dbConnect.php");
 class dbCall
 {
 	/** @var \mysqli $conn */
