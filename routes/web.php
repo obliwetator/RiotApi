@@ -39,3 +39,5 @@ Route::get('/leaderboards','PagesController@leaderboards');
 
 Route::get('/admin', 'PagesController@admin');
 Route::get('/adminAjax', 'ajaxController@adminAjax');
+
+Route::get('/report', 'PagesController@report');

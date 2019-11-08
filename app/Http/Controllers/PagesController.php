@@ -18,6 +18,11 @@ class PagesController extends Controller
 		return view('test');
 	}
 
+	public function report()
+	{
+		return view('report');
+	}
+
 	public function Summoner(Request $name)
 	{
 		clock()->startEvent("SummonerController", "Time spent in summoner controller");
