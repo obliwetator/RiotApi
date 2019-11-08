@@ -27,8 +27,8 @@
 
 	<link rel="stylesheet" type="text/css" href="/css/tipped.css"/>
 
-		{{-- Complied with laravel mix. Takes all dependencies and combines them all into 1 big js file --}}
-		<script src="{{ asset('js/app.js')}}"></script>
+	{{-- Complied with laravel mix. Takes all dependencies and combines them all into 1 big js file --}}
+	<script src="{{ asset('js/app.js')}}"></script>
 
 </head>
  
@@ -64,7 +64,7 @@
 	</div>
 	<div class="footer">
 		<hr>
-		<p>Footer stuff(Edit in layout file)</p>
+		<p>Footer stuff</p>
 	</div>
 
 
