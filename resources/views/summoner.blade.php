@@ -210,15 +210,49 @@
 															{{ $match->gameMode }}
 														</div>
 														<div class="Timestamp">
+															@php
+																function time_elapsed_string($datetime, $full = false) {
+																	$now = new DateTime;
+																	$ago = new DateTime($datetime);
+																	
+																	$diff = $now->diff($ago);
+
+																	$diff->w = floor($diff->d / 7);
+																	$diff->d -= $diff->w * 7;
+
+																	$string = array(
+																		'y' => 'year',
+																		'm' => 'month',
+																		'w' => 'week',
+																		'd' => 'day',
+																		'h' => 'hour',
+																		'i' => 'minute',
+																	);
+																	foreach ($string as $k => &$v) {
+																		if ($diff->$k) {
+																			$v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
+																		} else {
+																			unset($string[$k]);
+																		}
+																	}
+
+																	if (!$full) $string = array_slice($string, 0, 1);
+																	return $string ? implode(', ', $string) . ' ago' : 'just now';
+																}
+																$time = round((($match->gameCreation + $match->gameDuration) / 1000),0)
+															@endphp
 															{{-- Some fancy js to update the time realtime? --}}
-															@if (time() - (($match->gameCreation + $match->gameDuration)/1000) > 24*60*60)
+															{{-- Longer than a day --}}
+															@if (time() - (($match->gameCreation + $match->gameDuration)/1000) == 24*60*60)
 																<span>{{ date('j \D\a\y\s G \ \h\o\u\r\s \ \a\g\o' ,time() - (($match->gameCreation + $match->gameDuration)/1000) ) }}</span>
-															@else
+															@elseif(time() - (($match->gameCreation + $match->gameDuration)/1000) < 24*60*60)
 																@if (time() - (($match->gameCreation + $match->gameDuration)/1000) > 60*60)
 																	<span>{{ date('G \h\o\u\r\s i \m\i\n\u\t\e\s \ \a\g\o' ,time() - (($match->gameCreation + $match->gameDuration)/1000) ) }}</span>
 																@else
 																	<span>{{ date('i \m\i\n\u\t\e\s \ \a\g\o' ,time() - (($match->gameCreation + $match->gameDuration)/1000) ) }}</span>
 																@endif
+															@else
+																<span>{{ time_elapsed_string("@$time", true) }}</span>
 															@endif
 														</div>
 														<div class="Bar">
