@@ -24,7 +24,9 @@
 						<colgroup>
 							<col class="ChampionImage" style="width: 38px">
 							<col class="SummonerSpell" style="width: 38px">
+							@isset($matchById[0]->participants[0]->stats->perk0)
 							<col class="Runes" style="width: 38px">
+							@endisset
 							<col class="SummonerName" style="width: 140px">
 							<col class="Tier" style="width: 140px">
 							<col class="KDA" style="width: 80px">
@@ -35,10 +37,17 @@
 						</colgroup>
 						<thead class="Header">
 							<tr>
-								<th colspan="4">
-									<span>Victory?</span>
-									<span>Team color</span>
-								</th>
+								@if (isset($matchById[0]->participants[0]->stats->perk0))
+									<th colspan="4">
+										<span>Victory?</span>
+										<span>Team color</span>
+									</th>
+								@else
+									<th colspan="3">
+										<span>Victory?</span>
+										<span>Team color</span>
+									</th>
+								@endif
 								<th>Tier</th>
 								<th>KDA</th>
 								<th>Damage</th>
@@ -65,6 +74,8 @@
 											<img class="tooltipp" style="height: 20px; width: 20px;" title="{{ $summonerSpells->data[$matchById[0]->participants[$i]->spell1Id]->description }}" src="/lolContent/img2/spell/{{ $summonerSpells->data[$matchById[0]->participants[$i]->spell2Id]->id }}.png" alt="">
 										</div>
 									</td>
+									{{-- Fix if game was not played with new rune system TOD --}}
+									@isset($matchById[0]->participants[$i]->stats->perk0)
 									<td class="Rune">
 										<div class="Rune">
 											{{-- Zero index is Keystone --}}
@@ -73,7 +84,8 @@
 										<div class="Rune">
 											<img class="tooltipp" style="width: 20px; height: 20px" title="{{$runes->runes[$matchById[0]->participants[$i]->stats->perk0]->longDesc}}" src="/lolContent/img/perk-images/Styles/{{$matchById[0]->participants[$i]->stats->perkSubStyle}}.png" alt=""> 
 										</div>
-									</td>
+									</td>	
+									@endisset
 									<td class="SummonerName">
 										<a href='/summoner?name={{ $sumonerNameObj[0][$i]}}'>{{ $sumonerNameObj[0][$i]}}</a>
 									</td>
@@ -125,7 +137,9 @@
 						<colgroup>
 							<col class="ChampionImage" style="width: 38px">
 							<col class="SummonerSpell" style="width: 38px">
+							@isset($matchById[0]->participants[0]->stats->perk0)
 							<col class="Runes" style="width: 38px">
+							@endisset
 							<col class="SummonerName" style="width: 140px">
 							<col class="Tier" style="width: 140px">
 							<col class="KDA" style="width: 80px">
@@ -136,10 +150,17 @@
 						</colgroup>
 						<thead class="Header">
 							<tr>
-								<th colspan="4">
-									<span>Victory?</span>
-									<span>Team color</span>
-								</th>
+								@if (isset($matchById[0]->participants[0]->stats->perk0))
+									<th colspan="4">
+										<span>Victory?</span>
+										<span>Team color</span>
+									</th>
+								@else
+									<th colspan="3">
+										<span>Victory?</span>
+										<span>Team color</span>
+									</th>
+								@endif
 								<th>Tier</th>
 								<th>KDA</th>
 								<th>Damage</th>
@@ -167,6 +188,7 @@
 											<img class="tooltipp" style="height: 20px; width: 20px;" title="{{ $summonerSpells->data[$matchById[0]->participants[$i]->spell1Id]->description }}" src="/lolContent/img2/spell/{{ $summonerSpells->data[$matchById[0]->participants[$i]->spell2Id]->id }}.png" alt="">
 										</div>
 									</td>
+									@isset($matchById[0]->participants[$i]->stats->perk0)
 									<td class="Rune">
 										<div class="Rune">
 											{{-- Zero index is Keystone --}}
@@ -175,7 +197,8 @@
 										<div class="Rune">
 											<img class="tooltipp" style="width: 20px; height: 20px" title="{{$runes->runes[$matchById[0]->participants[$i]->stats->perk0]->longDesc}}" src="/lolContent/img/perk-images/Styles/{{$matchById[0]->participants[$i]->stats->perkSubStyle}}.png" alt=""> 
 										</div>
-									</td>
+									</td>	
+									@endisset
 									<td class="SummonerName">
 										<a href='/summoner?name={{ $sumonerNameObj[0][$i] }}'>{{ $sumonerNameObj[0][$i]}}</a>
 									</td>

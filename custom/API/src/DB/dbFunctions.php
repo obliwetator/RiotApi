@@ -144,13 +144,12 @@ class dbCall
 	}
 	/** @return Objects\Summoner */
 	public function getSummoner(string $region,	$summonerName)
-	{
+	{	
 		$summonerName = str_replace(' ', '', $summonerName);
 
 		$selectQuery = "SELECT * FROM `summoner_$region` WHERE `trimmedName` = '$summonerName'";
 
 		$resultAssoc = $this->makeDbCallGet($region, $selectQuery);
-
 
 		// First time we lookup. If it doesn't exist make an API request and put it in the DB.
 		if ($resultAssoc == null) {

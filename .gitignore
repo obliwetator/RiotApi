@@ -13,6 +13,7 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+db.php
 
 /resources/views/report.html
 dbConnect.php

@@ -14,7 +14,7 @@
 
 <script>
 
-	</script>
+</script>
 
 <?php
  /** @var API\LeagueAPI\Objects\Summoner $summoner
@@ -244,6 +244,8 @@
 																<img style="height: 28px; width: 28px;" src="/lolContent/img2/spell/{{ $summonerSpells->data[$match->participants[$targetSummoner[$key][$summoner->name]]->spell2Id]->id }}.png" alt="{{ $summonerSpells->data[$match->participants[$targetSummoner[$key][$summoner->name]]->spell2Id]->id }}">
 															</div>
 														</div>
+														{{-- Innactive accounts might not have played with the new rune system. If so dont display them at all --}}
+														@isset($match->participants[$targetSummoner[$key][$summoner->name]]->stats->perkSubStyle)
 														<div class="Runes d-inline-block" style="vertical-align: middle">
 															<div class="Rune" style="width: 32px; height: 32px">
 																<img style="width: 100%; height: 100%" src="/lolContent/img/{{$runes->runes[$match->participants[$targetSummoner[$key][$summoner->name]]->stats->perk0]->icon}}" alt="{{$runes->runes[$match->participants[$targetSummoner[$key][$summoner->name]]->stats->perk0]->name}}">
@@ -252,6 +254,7 @@
 																<img src="/lolContent/img/perk-images/Styles/{{$match->participants[$targetSummoner[$key][$summoner->name]]->stats->perkSubStyle}}.png" alt=""> 
 															</div>
 														</div>
+														@endisset
 														<div class="ChampionName">
 															<a href="/champions/{{$champions->data[$champion[$key]]->name}}/statistics" target="_blank">{{$champions->data[$champion[$key]]->name}}</a>
 														</div>
