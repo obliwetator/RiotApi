@@ -45,6 +45,7 @@ class PagesController extends Controller
 		clock()->startEvent("GetDbSummoner", "Load Summoner from db");
 		$summoner = $db->getSummoner($region, $summonerName);
 		clock()->endEvent("GetDbSummoner");
+
 		if (isset($summoner)) {
 			
 		}

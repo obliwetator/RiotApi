@@ -58,11 +58,11 @@
 								<img src="/lolContent/img2/champion/{{$champions->data[$activeGame->participants[$key]->championId]->name}}.png" alt="{{$champions->data[$activeGame->participants[$key]->championId]->name}}" style="height: 32px; width: 32px;">
 							</a>
 						</td>
-						<td class="Summoner Spell">
+						<td class="SummonerSpell">
 							<div class="Spell">	
 								<img style="height: 28px; width: 29px;" src="/lolContent/img2/spell/{{ $summonerSpells->data[$activeGame->participants[$key]->spell1Id]->id }}.png" alt="{{ $summonerSpells->data[$activeGame->participants[$key]->spell1Id]->id }}">
 							</div>
-							<div class="Spell" >
+							<div class="Spell">
 								<img style="height: 28px; width: 28px;" src="/lolContent/img2/spell/{{ $summonerSpells->data[$activeGame->participants[$key]->spell2Id]->id }}.png" alt="{{ $summonerSpells->data[$activeGame->participants[$key]->spell2Id]->id }}">
 							</div>
 						</td>

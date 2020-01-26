@@ -129,36 +129,36 @@
 								</div>
 							@else
 							<div>
-										{{-- If the summoner doesnt have a rank we display an empty border --}}
-									<div class="d-inline-block" style="vertical-align: middle">
-										<img src="/lolContent/emblems/Emblem_Provisional.png" alt="provisional icon" style = "height: 128px; width: 128px;">
-									</div>
-									<div class="d-inline-block" style="vertical-align: middle">
-										<div>Ranked Flex</div>
-										<div>Unranked</div>
-									</div>
+								{{-- If the summoner doesnt have a rank we display an empty border --}}
+								<div class="d-inline-block" style="vertical-align: middle">
+									<img src="/lolContent/emblems/Emblem_Provisional.png" alt="provisional icon" style = "height: 128px; width: 128px;">
+								</div>
+								<div class="d-inline-block" style="vertical-align: middle">
+									<div>Ranked Flex</div>
+									<div>Unranked</div>
+								</div>
 							</div>
 							@endif
 						</div>
 						<div class = "col-md-9" >
 							<div class="container-fluid" >
 								<div class="Header">
-										<div class="" id="Navigation">
-											<ul class="nav nav-tabs">
-												<li id="TotalGames" class = "nav-link active">
-													<a href="#" class="">Total</a>
-												</li>
-												<li id="RankedSoloGames" class = "nav-link">
-													<a href="#" class="">Ranked Solo</a>
-												</li>
-												<li id="RankedFlexGames" class = "nav-link">
-													<a href="#" class="">Ranked Flex</a>
-												</li>
-												<li id="SelectQueueType" class = "nav-link">
-													<a href="#" class="">Select Queue</a>
-												</li>
-											</ul>
-										</div>
+									<div class="" id="Navigation">
+										<ul class="nav nav-tabs">
+											<li id="TotalGames" class = "nav-link active">
+												<a href="#" class="">Total</a>
+											</li>
+											<li id="RankedSoloGames" class = "nav-link">
+												<a href="#" class="">Ranked Solo</a>
+											</li>
+											<li id="RankedFlexGames" class = "nav-link">
+												<a href="#" class="">Ranked Flex</a>
+											</li>
+											<li id="SelectQueueType" class = "nav-link">
+												<a href="#" class="">Select Queue</a>
+											</li>
+										</ul>
+									</div>
 								</div>
 								   <div class="Content">
 									<div class="GameAverageBox">
@@ -256,6 +256,7 @@
 															@endif
 														</div>
 														<div class="Bar">
+
 														</div>
 														@if ($targetSummoner[$key][$summoner->name] < 5)
 															<div class="GameResult">{{ $match->teams[0]->win}}</div>
@@ -272,7 +273,7 @@
 														</div>
 														<div class="SummonerSpell d-inline-block" style="vertical-align: middle">
 															<div class="Spell">	
-																<img style="height: 28px; width: 29px;" src="/lolContent/img2/spell/{{ $summonerSpells->data[$match->participants[$targetSummoner[$key][$summoner->name]]->spell1Id]->id }}.png" alt="{{ $summonerSpells->data[$match->participants[$targetSummoner[$key][$summoner->name]]->spell1Id]->id }}">
+																<img style="height: 28px; width: 28px;" src="/lolContent/img2/spell/{{ $summonerSpells->data[$match->participants[$targetSummoner[$key][$summoner->name]]->spell1Id]->id }}.png" alt="{{ $summonerSpells->data[$match->participants[$targetSummoner[$key][$summoner->name]]->spell1Id]->id }}">
 															</div>
 															<div class="Spell" >
 																<img style="height: 28px; width: 28px;" src="/lolContent/img2/spell/{{ $summonerSpells->data[$match->participants[$targetSummoner[$key][$summoner->name]]->spell2Id]->id }}.png" alt="{{ $summonerSpells->data[$match->participants[$targetSummoner[$key][$summoner->name]]->spell2Id]->id }}">
